@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aeroreel Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:     #080808;
+      --bg-2:   #111111;
+      --bg-3:   #181818;
+      --border: #1f1f1f;
+      --border2:#2a2a2a;
+      --accent: #C9A84C;
+      --text:   #ffffff;
+      --text-2: #888888;
+      --text-3: #444444;
+      --green:  #4caf7d;
+      --red:    #e06060;
+      --blue:   #5b8dee;
+      --serif:  'Cormorant Garamond', Georgia, serif;
+      --sans:   'Inter', -apple-system, sans-serif;
+      --r: 4px;
+      --ease: 0.25s ease;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: var(--sans); border: none; background: none; color: inherit; }
+    input, textarea, select { font-family: var(--sans); }
+
+    /* ── Login ── */
+    .login-screen {
+      position: fixed; inset: 0; background: var(--bg);
+      display: flex; align-items: center; justify-content: center; z-index: 999;
+      transition: opacity 0.4s ease;
+    }
+    .login-screen.hidden { opacity: 0; pointer-events: none; }
+    .login-box { width: 100%; max-width: 380px; padding: 0 24px; display: flex; flex-direction: column; align-items: center; }
+    .login-logo { margin-bottom: 40px; text-align: center; }
+    .login-logo .logo-text { font-family: var(--serif); font-size: 22px; letter-spacing: 0.2em; }
+    .login-logo .logo-sub { font-size: 9px; letter-spacing: 0.5em; color: var(--accent); text-transform: uppercase; margin-top: 2px; }
+    .login-badge { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-2); margin-bottom: 32px; }
+    .login-box input { width: 100%; padding: 13px 16px; margin-bottom: 12px; background: var(--bg-2); border: 1px solid var(--border2); border-radius: var(--r); color: var(--text); font-size: 14px; outline: none; transition: border-color var(--ease); }
+    .login-box input:focus { border-color: var(--accent); }
+    .login-box input::placeholder { color: var(--text-3); }
+    .btn-login { width: 100%; padding: 13px; background: var(--accent); color: #000; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; border-radius: var(--r); transition: background var(--ease); margin-top: 4px; }
+    .btn-login:hover { background: #dbb85c; }
+    .login-hint { font-size: 11px; color: var(--text-3); margin-top: 16px; }
+
+    /* ── Layout ── */
+    .admin-layout { display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar { width: 220px; flex-shrink: 0; background: var(--bg-2); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; }
+    .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid var(--border); }
+    .sidebar-logo .logo-text { font-family: var(--serif); font-size: 17px; letter-spacing: 0.18em; }
+    .sidebar-logo .logo-sub { font-size: 8px; letter-spacing: 0.45em; color: var(--accent); text-transform: uppercase; margin-top: 1px; }
+    .sidebar-nav { flex: 1; padding: 16px 0; }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 20px; font-size: 12px; letter-spacing: 0.06em; color: var(--text-2); cursor: pointer; transition: all var(--ease); border-left: 2px solid transparent; }
+    .nav-item:hover { color: var(--text); background: var(--bg-3); }
+    .nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(201,168,76,0.05); }
+    .nav-icon { width: 16px; text-align: center; font-size: 14px; }
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
+    .logout-btn { display: flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: 0.08em; color: var(--text-3); transition: color var(--ease); width: 100%; text-align: left; padding: 8px 0; }
+    .logout-btn:hover { color: var(--red); }
+
+    /* ── Main ── */
+    .main-content { flex: 1; margin-left: 220px; padding: 32px; min-height: 100vh; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 12px; }
+    .page-title { font-family: var(--serif); font-size: 28px; font-weight: 300; }
+    .page-subtitle { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+    /* ── Buttons ── */
+    .btn-sm { padding: 9px 18px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; border-radius: var(--r); transition: all var(--ease); font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-accent { background: var(--accent); color: #000; }
+    .btn-accent:hover { background: #dbb85c; }
+    .btn-outline { border: 1px solid var(--border2); color: var(--text-2); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-danger { border: 1px solid rgba(224,96,96,0.3); color: var(--red); }
+    .btn-danger:hover { background: rgba(224,96,96,0.1); }
+    .btn-ghost { color: var(--text-2); padding: 9px 12px; }
+    .btn-ghost:hover { color: var(--accent); }
+
+    /* ── Stat Cards ── */
+    .stat-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 32px; }
+    .stat-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; }
+    .stat-card-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-2); margin-bottom: 12px; }
+    .stat-card-value { font-family: var(--serif); font-size: 40px; font-weight: 300; color: var(--accent); line-height: 1; }
+    .stat-card-sub { font-size: 11px; color: var(--text-3); margin-top: 8px; }
+    .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; }
+    .dot-green { background: var(--green); }
+    .dot-accent { background: var(--accent); }
+    .dot-blue { background: var(--blue); }
+
+    /* ── Tab Content ── */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── Panel views (sub-views within a tab) ── */
+    .panel-view { display: none; }
+    .panel-view.active { display: block; }
+
+    /* ── Cards ── */
+    .card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 20px; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
+    .card-title { font-size: 13px; font-weight: 500; letter-spacing: 0.04em; }
+    .card-body { padding: 24px; }
+
+    /* ── Table ── */
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th { text-align: left; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-3); font-weight: 500; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+    .data-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); vertical-align: middle; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: var(--bg-3); }
+    .td-main { color: var(--text); font-weight: 500; }
+    .td-email { color: var(--text-2); }
+
+    .thumb-cell { width: 60px; height: 44px; border-radius: 2px; overflow: hidden; background: var(--bg-3); }
+    .thumb-cell img { width: 100%; height: 100%; object-fit: cover; }
+
+    .badge { display: inline-block; padding: 3px 10px; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 20px; font-weight: 500; }
+    .badge-new { background: rgba(91,141,238,0.15); color: var(--blue); }
+    .badge-review { background: rgba(201,168,76,0.15); color: var(--accent); }
+    .badge-done { background: rgba(76,175,125,0.15); color: var(--green); }
+    .badge-active { background: rgba(76,175,125,0.15); color: var(--green); }
+
+    .cat-pill { display: inline-block; padding: 3px 10px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 20px; border: 1px solid rgba(201,168,76,0.3); color: var(--accent); }
+
+    .action-btn { font-size: 11px; color: var(--text-3); padding: 5px 10px; border-radius: var(--r); transition: all var(--ease); }
+    .action-btn:hover { color: var(--accent); background: rgba(201,168,76,0.08); }
+    .action-btn.danger:hover { color: var(--red); background: rgba(224,96,96,0.08); }
+
+    /* ── Projects List view ── */
+    .projects-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+
+    /* ── New / Edit Project Form ── */
+    .panel-back { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: 0.08em; color: var(--text-2); margin-bottom: 28px; transition: color var(--ease); }
+    .panel-back:hover { color: var(--accent); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 7px; }
+    .form-group.full { grid-column: span 2; }
+    .form-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-2); }
+    .form-input { padding: 12px 14px; background: var(--bg-3); border: 1px solid var(--border); border-radius: var(--r); color: var(--text); font-size: 13px; outline: none; transition: border-color var(--ease); }
+    .form-input:focus { border-color: var(--accent); }
+    .form-input::placeholder { color: var(--text-3); }
+    select.form-input { cursor: pointer; }
+    select.form-input option { background: var(--bg-2); }
+    .form-input-check { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .check-label { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); cursor: pointer; }
+    .check-label input { width: 14px; height: 14px; accent-color: var(--accent); }
+    .form-footer { margin-top: 24px; display: flex; gap: 10px; }
+
+    /* ── Cover upload in form ── */
+    .cover-upload-zone { border: 2px dashed var(--border2); border-radius: var(--r); padding: 32px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; transition: all var(--ease); background: var(--bg-3); text-align: center; }
+    .cover-upload-zone:hover { border-color: var(--accent); background: rgba(201,168,76,0.04); }
+    .cover-preview { width: 100%; max-width: 200px; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--r); display: none; }
+
+    /* ── Project Photos management view ── */
+    .project-photos-header { margin-bottom: 24px; }
+    .project-photos-title { font-family: var(--serif); font-size: 26px; font-weight: 300; }
+    .project-photos-meta { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+
+    /* ── Upload zone ── */
+    .upload-zone { border: 2px dashed var(--border2); border-radius: var(--r); padding: 48px 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; transition: all var(--ease); background: var(--bg-3); text-align: center; }
+    .upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(201,168,76,0.04); }
+    .upload-icon { font-size: 32px; color: var(--text-3); }
+    .upload-zone h4 { font-size: 14px; font-weight: 400; }
+    .upload-zone p { font-size: 12px; color: var(--text-2); }
+
+    .photo-management-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 20px; }
+    .photo-mgmt-item { position: relative; aspect-ratio: 4/3; border-radius: var(--r); overflow: hidden; background: var(--bg-3); }
+    .photo-mgmt-item img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-mgmt-item .photo-delete { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: rgba(0,0,0,0.75); color: var(--text-2); font-size: 14px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity var(--ease); }
+    .photo-mgmt-item:hover .photo-delete { opacity: 1; }
+    .photo-mgmt-item .photo-delete:hover { color: var(--red); }
+    .photo-num { position: absolute; bottom: 6px; left: 8px; font-size: 10px; color: rgba(255,255,255,0.5); }
+
+    /* ── Search ── */
+    .search-wrap { position: relative; }
+    .search-wrap input { padding: 9px 14px 9px 34px; background: var(--bg-3); border: 1px solid var(--border); border-radius: var(--r); color: var(--text); font-size: 12px; outline: none; width: 220px; transition: border-color var(--ease); }
+    .search-wrap input:focus { border-color: var(--accent); }
+    .search-wrap input::placeholder { color: var(--text-3); }
+    .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-3); font-size: 13px; pointer-events: none; }
+
+    /* ── Settings ── */
+    .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .settings-grid .form-group { margin-bottom: 0; }
+    .settings-footer { margin-top: 24px; display: flex; gap: 10px; }
+
+    /* ── Toast ── */
+    .toast { position: fixed; bottom: 32px; right: 32px; background: var(--bg-2); border: 1px solid var(--border); border-left: 3px solid var(--green); padding: 14px 20px; border-radius: var(--r); font-size: 13px; transform: translateY(10px); opacity: 0; transition: all 0.3s ease; pointer-events: none; z-index: 9999; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── Confirm dialog ── */
+    .confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 8000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity var(--ease); }
+    .confirm-overlay.show { opacity: 1; pointer-events: all; }
+    .confirm-box { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); padding: 32px; max-width: 360px; width: 90%; }
+    .confirm-box h4 { font-family: var(--serif); font-size: 20px; margin-bottom: 10px; }
+    .confirm-box p { font-size: 13px; color: var(--text-2); margin-bottom: 24px; line-height: 1.6; }
+    .confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+    @media (max-width: 900px) {
+      .stat-cards { grid-template-columns: repeat(2,1fr); }
+      .settings-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="logo-text">AEROREEL</div>
+        <div class="logo-sub">MEDIA</div>
+      </div>
+      <p class="login-badge">Admin Portal</p>
+      <input type="email" id="loginEmail" placeholder="Email address" value="Hallo@aeroreelmedia.com">
+      <input type="password" id="loginPass" placeholder="Password" value="••••••••">
+      <button class="btn-login" id="loginBtn">Sign In</button>
+      <p class="login-hint">Demo: click Sign In with any credentials</p>
+    </div>
+  </div>
+
+  <!-- Admin Layout -->
+  <div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-text">AEROREEL</div>
+        <div class="logo-sub">MEDIA</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-item active" data-tab="dashboard"><span class="nav-icon">▦</span> Dashboard</div>
+        <div class="nav-item" data-tab="projects"><span class="nav-icon">◧</span> Projects</div>
+        <div class="nav-item" data-tab="bookings"><span class="nav-icon">◈</span> Bookings</div>
+        <div class="nav-item" data-tab="emails"><span class="nav-icon">✉</span> Email List</div>
+        <div class="nav-item" data-tab="settings"><span class="nav-icon">◎</span> Settings</div>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="logoutBtn"><span>↩</span> Sign Out</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- ═══ DASHBOARD ═══ -->
+      <div class="tab-content active" id="tab-dashboard">
+        <div class="topbar">
+          <div>
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Welcome back, Andy</p>
+          </div>
+          <div class="topbar-right">
+            <a href="../index.html" target="_blank" class="btn-sm btn-outline">← View Site</a>
+          </div>
+        </div>
+
+        <div class="stat-cards">
+          <div class="stat-card">
+            <p class="stat-card-label">New Bookings</p>
+            <p class="stat-card-value">12</p>
+            <p class="stat-card-sub"><span class="dot dot-green"></span>3 this week</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-card-label">Email Subscribers</p>
+            <p class="stat-card-value">284</p>
+            <p class="stat-card-sub"><span class="dot dot-accent"></span>+18 this month</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-card-label">Active Projects</p>
+            <p class="stat-card-value" id="dashProjectCount">10</p>
+            <p class="stat-card-sub"><span class="dot dot-blue"></span>Across 6 categories</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-card-label">Total Photos</p>
+            <p class="stat-card-value" id="dashPhotoCount">0</p>
+            <p class="stat-card-sub"><span class="dot dot-green"></span>Across all projects</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Recent Booking Inquiries</span>
+            <button class="btn-sm btn-outline" onclick="switchTab('bookings')">View All</button>
+          </div>
+          <div class="card-body" style="padding:0">
+            <table class="data-table">
+              <thead><tr><th>Name</th><th>Event</th><th>Date</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                <tr><td class="td-main">Sarah Chan</td><td>Wedding</td><td>15 Jun 2024</td><td><span class="badge badge-new">New</span></td><td><button class="action-btn" onclick="showToast('Email window opened')">Reply</button></td></tr>
+                <tr><td class="td-main">Tommy Lee</td><td>Real Estate</td><td>22 Jun 2024</td><td><span class="badge badge-review">In Review</span></td><td><button class="action-btn" onclick="showToast('Email window opened')">Reply</button></td></tr>
+                <tr><td class="td-main">Priya Sharma</td><td>Corporate</td><td>8 Jul 2024</td><td><span class="badge badge-new">New</span></td><td><button class="action-btn" onclick="showToast('Email window opened')">Reply</button></td></tr>
+                <tr><td class="td-main">Mark Tong</td><td>Construction</td><td>Ongoing</td><td><span class="badge badge-done">Confirmed</span></td><td><button class="action-btn">View</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Recent Projects Updated</span>
+            <button class="btn-sm btn-outline" onclick="switchTab('projects')">Manage Projects</button>
+          </div>
+          <div class="card-body" style="padding:0" id="dashRecentProjects"></div>
+        </div>
+      </div>
+
+      <!-- ═══ PROJECTS ═══ -->
+      <div class="tab-content" id="tab-projects">
+
+        <!-- View 1: Projects List -->
+        <div class="panel-view active" id="view-list">
+          <div class="topbar">
+            <div>
+              <h1 class="page-title">Projects</h1>
+              <p class="page-subtitle" id="projectCountLabel">10 projects</p>
+            </div>
+            <div class="topbar-right">
+              <div class="search-wrap">
+                <span class="search-icon">⌕</span>
+                <input type="text" id="projectSearch" placeholder="Search projects...">
+              </div>
+              <button class="btn-sm btn-accent" id="btnNewProject">+ New Project</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" style="padding:0">
+              <table class="data-table" id="projectsTable">
+                <thead>
+                  <tr>
+                    <th style="width:70px">Cover</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Photos</th>
+                    <th style="width:180px"></th>
+                  </tr>
+                </thead>
+                <tbody id="projectsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- View 2: New / Edit Project Form -->
+        <div class="panel-view" id="view-form">
+          <button class="panel-back" id="formBack">← Back to Projects</button>
+          <div class="topbar" style="margin-bottom:24px">
+            <div>
+              <h1 class="page-title" id="formTitle">New Project</h1>
+              <p class="page-subtitle">Fill in the project details</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <form id="projectForm" novalidate>
+                <input type="hidden" id="editingProjectId">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label class="form-label">Project Title *</label>
+                    <input class="form-input" id="fTitle" placeholder="e.g. Sarah & Tom">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Category *</label>
+                    <select class="form-input" id="fCategory">
+                      <option value="">— Select category —</option>
+                      <option>Wedding</option>
+                      <option>Real Estate</option>
+                      <option>Corporate</option>
+                      <option>Construction</option>
+                      <option>Festival</option>
+                      <option>Portrait</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input class="form-input" id="fLocation" placeholder="e.g. Repulse Bay, Hong Kong">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input class="form-input" id="fDate" placeholder="e.g. March 2024">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Media Type</label>
+                    <select class="form-input" id="fType">
+                      <option>Photo</option>
+                      <option>Video</option>
+                      <option>Photo + Video</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Services</label>
+                    <div class="form-input-check" style="padding:12px 0">
+                      <label class="check-label"><input type="checkbox" value="Drone Photography"> Drone Photography</label>
+                      <label class="check-label"><input type="checkbox" value="Drone Videography"> Drone Videography</label>
+                      <label class="check-label"><input type="checkbox" value="Ground Photography"> Ground Photography</label>
+                      <label class="check-label"><input type="checkbox" value="Post-Production"> Post-Production</label>
+                    </div>
+                  </div>
+                  <div class="form-group full">
+                    <label class="form-label">Cover Photo</label>
+                    <div class="cover-upload-zone" id="coverUploadZone">
+                      <img class="cover-preview" id="coverPreview" alt="Cover preview">
+                      <span class="upload-icon" id="coverUploadIcon">⬆</span>
+                      <p id="coverUploadText">Click to upload cover photo</p>
+                      <input type="file" id="coverFileInput" accept="image/*" style="display:none">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-footer">
+                  <button type="submit" class="btn-sm btn-accent">Save Project</button>
+                  <button type="button" class="btn-sm btn-outline" id="formCancelBtn">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- View 3: Manage Photos for a Project -->
+        <div class="panel-view" id="view-photos">
+          <button class="panel-back" id="photosBack">← Back to Projects</button>
+          <div class="topbar" style="margin-bottom:24px">
+            <div class="project-photos-header">
+              <h1 class="project-photos-title" id="photosProjectTitle"></h1>
+              <p class="project-photos-meta" id="photosProjectMeta"></p>
+            </div>
+            <div class="topbar-right">
+              <button class="btn-sm btn-accent" id="btnUploadMore">+ Upload Photos</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Photo Gallery</span>
+              <span class="card-title" id="photosCount" style="color:var(--text-3);font-weight:400"></span>
+            </div>
+            <div class="card-body">
+              <div class="upload-zone" id="photosUploadZone" style="margin-bottom:20px;display:none">
+                <div class="upload-icon">⬆</div>
+                <h4>Drag &amp; drop photos here</h4>
+                <p>JPG, PNG, WEBP — up to 20MB each</p>
+                <input type="file" id="photosFileInput" multiple accept="image/*" style="display:none">
+              </div>
+              <div class="photo-management-grid" id="photoManagementGrid"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══ BOOKINGS ═══ -->
+      <div class="tab-content" id="tab-bookings">
+        <div class="topbar">
+          <div>
+            <h1 class="page-title">Bookings</h1>
+            <p class="page-subtitle">Manage all incoming inquiries</p>
+          </div>
+          <div class="topbar-right">
+            <div class="search-wrap">
+              <span class="search-icon">⌕</span>
+              <input type="text" placeholder="Search...">
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <table class="data-table">
+              <thead><tr><th>Name</th><th>Email</th><th>Event Type</th><th>Date</th><th>Location</th><th>Newsletter</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                <tr><td class="td-main">Sarah Chan</td><td class="td-email">sarah.chan@gmail.com</td><td>Wedding</td><td>15 Jun 2024</td><td>Repulse Bay</td><td>✓</td><td><span class="badge badge-new">New</span></td><td><button class="action-btn" onclick="showToast('Email composed')">Reply</button></td></tr>
+                <tr><td class="td-main">Tommy Lee</td><td class="td-email">tommy@propertyco.hk</td><td>Real Estate</td><td>22 Jun 2024</td><td>Mid-Levels</td><td>✓</td><td><span class="badge badge-review">In Review</span></td><td><button class="action-btn" onclick="showToast('Email composed')">Reply</button></td></tr>
+                <tr><td class="td-main">Priya Sharma</td><td class="td-email">priya@corp.com</td><td>Corporate</td><td>8 Jul 2024</td><td>Wan Chai</td><td>—</td><td><span class="badge badge-new">New</span></td><td><button class="action-btn" onclick="showToast('Email composed')">Reply</button></td></tr>
+                <tr><td class="td-main">Mark Tong</td><td class="td-email">m.tong@developer.hk</td><td>Construction</td><td>Ongoing</td><td>Kowloon Bay</td><td>✓</td><td><span class="badge badge-done">Confirmed</span></td><td><button class="action-btn">View</button></td></tr>
+                <tr><td class="td-main">Clara Ng</td><td class="td-email">clara@studio.co</td><td>Portrait</td><td>29 Jun 2024</td><td>Victoria Peak</td><td>✓</td><td><span class="badge badge-done">Confirmed</span></td><td><button class="action-btn">View</button></td></tr>
+                <tr><td class="td-main">Alex Poon</td><td class="td-email">alex.p@event.org</td><td>Festival</td><td>20 Jul 2024</td><td>West Kowloon</td><td>—</td><td><span class="badge badge-new">New</span></td><td><button class="action-btn" onclick="showToast('Email composed')">Reply</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ EMAIL LIST ═══ -->
+      <div class="tab-content" id="tab-emails">
+        <div class="topbar">
+          <div>
+            <h1 class="page-title">Email Subscribers</h1>
+            <p class="page-subtitle">284 active subscribers</p>
+          </div>
+          <div class="topbar-right">
+            <button class="btn-sm btn-outline" onclick="showToast('CSV exported')">Export CSV</button>
+            <button class="btn-sm btn-accent" onclick="showToast('Compose window opened')">+ Compose Blast</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Subscriber List</span>
+            <div class="search-wrap"><span class="search-icon">⌕</span><input type="text" placeholder="Search emails..."></div>
+          </div>
+          <div class="card-body" style="padding:0">
+            <table class="data-table">
+              <thead><tr><th>Name</th><th>Email</th><th>Source</th><th>Subscribed</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                <tr><td class="td-main">Amy Wong</td><td class="td-email">amy.wong@email.com</td><td>Website Signup</td><td>25 May 2024</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="showToast('Email sent to Amy')">Email</button></td></tr>
+                <tr><td class="td-main">Daniel Ho</td><td class="td-email">d.ho@company.hk</td><td>Booking Form</td><td>24 May 2024</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="showToast('Email sent to Daniel')">Email</button></td></tr>
+                <tr><td class="td-main">Jessica Lam</td><td class="td-email">jessica@studio.co</td><td>Website Signup</td><td>23 May 2024</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="showToast('Email sent')">Email</button></td></tr>
+                <tr><td class="td-main">Kevin Chan</td><td class="td-email">kevin.c@hotmail.com</td><td>Booking Form</td><td>20 May 2024</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="showToast('Email sent')">Email</button></td></tr>
+                <tr><td class="td-main">Rachel Yip</td><td class="td-email">r.yip@gmail.com</td><td>Website Signup</td><td>18 May 2024</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="showToast('Email sent')">Email</button></td></tr>
+                <tr><td class="td-main">Marcus Liu</td><td class="td-email">marcus@design.hk</td><td>Booking Form</td><td>15 May 2024</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="showToast('Email sent')">Email</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SETTINGS ═══ -->
+      <div class="tab-content" id="tab-settings">
+        <div class="topbar">
+          <div><h1 class="page-title">Settings</h1><p class="page-subtitle">Site configuration</p></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Business Information</span></div>
+          <div class="card-body">
+            <div class="settings-grid">
+              <div class="form-group"><label class="form-label">Business Name</label><input class="form-input" value="Aeroreel Media"></div>
+              <div class="form-group"><label class="form-label">Contact Email</label><input class="form-input" type="email" value="Hallo@aeroreelmedia.com"></div>
+              <div class="form-group"><label class="form-label">Phone (Text Only)</label><input class="form-input" type="tel" value="825-288-2184"></div>
+              <div class="form-group"><label class="form-label">Location</label><input class="form-input" value="Hong Kong"></div>
+              <div class="form-group" style="grid-column:span 2"><label class="form-label">Tagline</label><input class="form-input" value="Your Story, Our Lens."></div>
+            </div>
+            <div class="settings-footer">
+              <button class="btn-sm btn-accent" onclick="showToast('Settings saved ✓')">Save Changes</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Social Links</span></div>
+          <div class="card-body">
+            <div class="settings-grid">
+              <div class="form-group"><label class="form-label">Instagram</label><input class="form-input" placeholder="https://instagram.com/aeroreelmedia"></div>
+              <div class="form-group"><label class="form-label">YouTube</label><input class="form-input" placeholder="https://youtube.com/@aeroreelmedia"></div>
+              <div class="form-group"><label class="form-label">Facebook</label><input class="form-input" placeholder="https://facebook.com/aeroreelmedia"></div>
+            </div>
+            <div class="settings-footer">
+              <button class="btn-sm btn-accent" onclick="showToast('Social links saved ✓')">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Confirm Dialog -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+      <h4 id="confirmTitle">Delete Project?</h4>
+      <p id="confirmMsg">This will permanently remove this project and all its photos.</p>
+      <div class="confirm-actions">
+        <button class="btn-sm btn-outline" id="confirmCancel">Cancel</button>
+        <button class="btn-sm btn-danger" id="confirmOk">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ── Project data (mirrors main site) ── */
+    let PROJECTS = [
+      { id:'w1', category:'Wedding', type:'Photo', title:'Sarah & Tom', location:'Repulse Bay, Hong Kong', date:'March 2024', services:['Drone Photography','Ground Photography'], cover:'https://images.unsplash.com/photo-1519741497674-611481863552?w=300&q=60', photos: Array.from({length:8},(_,i)=>`https://picsum.photos/seed/w1${String.fromCharCode(97+i)}/400/300`) },
+      { id:'w2', category:'Wedding', type:'Photo + Video', title:'Emma & James', location:'The Peak, Hong Kong', date:'November 2023', services:['Drone Videography','Drone Photography','Post-Production'], cover:'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=300&q=60', photos: Array.from({length:6},(_,i)=>`https://picsum.photos/seed/w2${String.fromCharCode(97+i)}/400/300`) },
+      { id:'w3', category:'Wedding', type:'Photo', title:'Clara & David', location:'Discovery Bay, Lantau', date:'June 2024', services:['Drone Photography','Ground Photography'], cover:'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=300&q=60', photos: Array.from({length:7},(_,i)=>`https://picsum.photos/seed/w3${String.fromCharCode(97+i)}/400/300`) },
+      { id:'re1', category:'Real Estate', type:'Photo + Video', title:'23/F The Centrium', location:'Central, Hong Kong', date:'April 2024', services:['Drone Photography','Ground Photography','Post-Production'], cover:'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=300&q=60', photos: Array.from({length:9},(_,i)=>`https://picsum.photos/seed/re1${String.fromCharCode(97+i)}/400/300`) },
+      { id:'re2', category:'Real Estate', type:'Photo', title:'Clearwater Bay Villa', location:'Sai Kung, Hong Kong', date:'January 2024', services:['Drone Photography','Ground Photography'], cover:'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=300&q=60', photos: Array.from({length:6},(_,i)=>`https://picsum.photos/seed/re2${String.fromCharCode(97+i)}/400/300`) },
+      { id:'co1', category:'Corporate', type:'Photo + Video', title:'HSBC Annual Gala 2024', location:'Wan Chai, Hong Kong', date:'February 2024', services:['Drone Videography','Ground Photography','Post-Production'], cover:'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=300&q=60', photos: Array.from({length:6},(_,i)=>`https://picsum.photos/seed/co1${String.fromCharCode(97+i)}/400/300`) },
+      { id:'co2', category:'Corporate', type:'Video', title:'Nike HK Product Launch', location:'Causeway Bay, Hong Kong', date:'May 2024', services:['Drone Videography','Post-Production'], cover:'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=300&q=60', photos: Array.from({length:5},(_,i)=>`https://picsum.photos/seed/co2${String.fromCharCode(97+i)}/400/300`) },
+      { id:'cn1', category:'Construction', type:'Photo', title:'Kowloon Bay Development', location:'Kowloon Bay, Hong Kong', date:'Ongoing 2023–2024', services:['Drone Photography'], cover:'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=300&q=60', photos: Array.from({length:8},(_,i)=>`https://picsum.photos/seed/cn1${String.fromCharCode(97+i)}/400/300`) },
+      { id:'fe1', category:'Festival', type:'Photo + Video', title:'Clockenflap 2023', location:'West Kowloon, Hong Kong', date:'November 2023', services:['Drone Videography','Ground Photography','Post-Production'], cover:'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=300&q=60', photos: Array.from({length:6},(_,i)=>`https://picsum.photos/seed/fe1${String.fromCharCode(97+i)}/400/300`) },
+      { id:'po1', category:'Portrait', type:'Photo', title:'Urban Landscapes Series', location:'Various, Hong Kong', date:'April 2024', services:['Ground Photography','Drone Photography'], cover:'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&q=60', photos: Array.from({length:6},(_,i)=>`https://picsum.photos/seed/po1${String.fromCharCode(97+i)}/400/300`) },
+    ];
+
+    /* ── Login / Logout ── */
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      document.getElementById('loginScreen').classList.add('hidden');
+      initDashboard();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden'))
+        document.getElementById('loginBtn').click();
+    });
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      document.getElementById('loginScreen').classList.remove('hidden');
+    });
+
+    /* ── Tab switching ── */
+    function switchTab(name) {
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+      document.getElementById(`tab-${name}`).classList.add('active');
+      if (name === 'projects') showView('list');
+    }
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => switchTab(item.dataset.tab));
+    });
+
+    /* ── Panel view switching (within Projects tab) ── */
+    function showView(name) {
+      document.querySelectorAll('#tab-projects .panel-view').forEach(v => v.classList.remove('active'));
+      document.getElementById(`view-${name}`).classList.add('active');
+    }
+
+    /* ── Init dashboard ── */
+    function initDashboard() {
+      const totalPhotos = PROJECTS.reduce((sum, p) => sum + p.photos.length, 0);
+      document.getElementById('dashPhotoCount').textContent = totalPhotos;
+      document.getElementById('dashProjectCount').textContent = PROJECTS.length;
+
+      const recent = PROJECTS.slice(0, 5);
+      const tbody = document.getElementById('dashRecentProjects');
+      tbody.innerHTML = `<table class="data-table"><thead><tr><th style="width:70px">Cover</th><th>Title</th><th>Category</th><th>Photos</th><th></th></tr></thead><tbody>
+        ${recent.map(p => `<tr>
+          <td><div class="thumb-cell"><img src="${p.cover}" alt="" loading="lazy"></div></td>
+          <td class="td-main">${p.title}</td>
+          <td><span class="cat-pill">${p.category}</span></td>
+          <td>${p.photos.length}</td>
+          <td><button class="action-btn" onclick="switchTab('projects');setTimeout(()=>openPhotosView('${p.id}'),100)">Manage Photos</button></td>
+        </tr>`).join('')}
+      </tbody></table>`;
+    }
+
+    /* ── Render projects table ── */
+    function renderProjectsTable(filter) {
+      const list = filter ? PROJECTS.filter(p => p.title.toLowerCase().includes(filter.toLowerCase()) || p.category.toLowerCase().includes(filter.toLowerCase())) : PROJECTS;
+      document.getElementById('projectCountLabel').textContent = `${list.length} project${list.length !== 1 ? 's' : ''}`;
+      const tbody = document.getElementById('projectsTableBody');
+      tbody.innerHTML = list.map(p => `
+        <tr>
+          <td><div class="thumb-cell"><img src="${p.cover}" alt="" loading="lazy"></div></td>
+          <td class="td-main">${p.title}</td>
+          <td><span class="cat-pill">${p.category}</span></td>
+          <td>${p.location}</td>
+          <td>${p.date}</td>
+          <td>${p.photos.length} photos</td>
+          <td style="text-align:right">
+            <button class="action-btn" onclick="openEditForm('${p.id}')">Edit</button>
+            <button class="action-btn" onclick="openPhotosView('${p.id}')">Photos</button>
+            <button class="action-btn danger" onclick="confirmDelete('${p.id}')">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('projectSearch').addEventListener('input', e => renderProjectsTable(e.target.value));
+
+    /* ── New project ── */
+    document.getElementById('btnNewProject').addEventListener('click', () => {
+      document.getElementById('editingProjectId').value = '';
+      document.getElementById('projectForm').reset();
+      document.getElementById('formTitle').textContent = 'New Project';
+      document.getElementById('coverPreview').style.display = 'none';
+      document.getElementById('coverUploadIcon').style.display = '';
+      document.getElementById('coverUploadText').textContent = 'Click to upload cover photo';
+      showView('form');
+    });
+    document.getElementById('formBack').addEventListener('click', () => showView('list'));
+    document.getElementById('formCancelBtn').addEventListener('click', () => showView('list'));
+
+    /* ── Edit project ── */
+    function openEditForm(id) {
+      const p = PROJECTS.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('editingProjectId').value = id;
+      document.getElementById('fTitle').value = p.title;
+      document.getElementById('fCategory').value = p.category;
+      document.getElementById('fLocation').value = p.location;
+      document.getElementById('fDate').value = p.date;
+      document.getElementById('fType').value = p.type;
+      document.getElementById('formTitle').textContent = 'Edit Project';
+      // Cover preview
+      const prev = document.getElementById('coverPreview');
+      prev.src = p.cover;
+      prev.style.display = 'block';
+      document.getElementById('coverUploadIcon').style.display = 'none';
+      document.getElementById('coverUploadText').textContent = 'Click to change cover';
+      showView('form');
+    }
+
+    /* ── Cover photo upload in form ── */
+    const coverZone = document.getElementById('coverUploadZone');
+    const coverInput = document.getElementById('coverFileInput');
+    coverZone.addEventListener('click', () => coverInput.click());
+    coverInput.addEventListener('change', () => {
+      const file = coverInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        const prev = document.getElementById('coverPreview');
+        prev.src = e.target.result;
+        prev.style.display = 'block';
+        document.getElementById('coverUploadIcon').style.display = 'none';
+        document.getElementById('coverUploadText').textContent = 'Click to change cover';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    /* ── Save project form ── */
+    document.getElementById('projectForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const title = document.getElementById('fTitle').value.trim();
+      const category = document.getElementById('fCategory').value;
+      if (!title || !category) { showToast('Please fill in title and category'); return; }
+
+      const editId = document.getElementById('editingProjectId').value;
+      if (editId) {
+        const p = PROJECTS.find(x => x.id === editId);
+        if (p) {
+          p.title = title;
+          p.category = category;
+          p.location = document.getElementById('fLocation').value;
+          p.date = document.getElementById('fDate').value;
+          p.type = document.getElementById('fType').value;
+          showToast('Project updated ✓');
+        }
+      } else {
+        const newId = 'proj_' + Date.now();
+        PROJECTS.push({
+          id: newId,
+          category,
+          type: document.getElementById('fType').value,
+          title,
+          location: document.getElementById('fLocation').value,
+          date: document.getElementById('fDate').value,
+          services: [],
+          cover: 'https://picsum.photos/seed/' + newId + '/300/225',
+          photos: []
+        });
+        showToast('Project created ✓');
+      }
+      renderProjectsTable();
+      showView('list');
+    });
+
+    /* ── Manage photos for a project ── */
+    let currentPhotoProjectId = null;
+
+    function openPhotosView(id) {
+      const p = PROJECTS.find(x => x.id === id);
+      if (!p) return;
+      currentPhotoProjectId = id;
+      document.getElementById('photosProjectTitle').textContent = p.title;
+      document.getElementById('photosProjectMeta').textContent = `${p.category} · ${p.location} · ${p.date}`;
+      renderPhotoGrid(p);
+      document.getElementById('photosUploadZone').style.display = 'none';
+      showView('photos');
+    }
+
+    function renderPhotoGrid(p) {
+      document.getElementById('photosCount').textContent = `${p.photos.length} photo${p.photos.length !== 1 ? 's' : ''}`;
+      const grid = document.getElementById('photoManagementGrid');
+      grid.innerHTML = p.photos.map((src, i) => `
+        <div class="photo-mgmt-item" data-index="${i}">
+          <img src="${src}" alt="" loading="lazy">
+          <button class="photo-delete" onclick="deletePhoto('${p.id}',${i})" title="Delete">×</button>
+          <span class="photo-num">${i + 1}</span>
+        </div>
+      `).join('');
+    }
+
+    function deletePhoto(projectId, idx) {
+      const p = PROJECTS.find(x => x.id === projectId);
+      if (!p) return;
+      p.photos.splice(idx, 1);
+      renderPhotoGrid(p);
+      showToast('Photo removed');
+    }
+
+    document.getElementById('photosBack').addEventListener('click', () => {
+      renderProjectsTable();
+      showView('list');
+    });
+
+    /* Upload more photos */
+    const photosUploadZone = document.getElementById('photosUploadZone');
+    const photosFileInput = document.getElementById('photosFileInput');
+
+    document.getElementById('btnUploadMore').addEventListener('click', () => {
+      const isVisible = photosUploadZone.style.display !== 'none';
+      photosUploadZone.style.display = isVisible ? 'none' : 'flex';
+      photosUploadZone.style.flexDirection = 'column';
+      photosUploadZone.style.alignItems = 'center';
+    });
+
+    photosUploadZone.addEventListener('click', () => photosFileInput.click());
+    photosUploadZone.addEventListener('dragover', e => { e.preventDefault(); photosUploadZone.classList.add('drag'); });
+    photosUploadZone.addEventListener('dragleave', () => photosUploadZone.classList.remove('drag'));
+    photosUploadZone.addEventListener('drop', e => { e.preventDefault(); photosUploadZone.classList.remove('drag'); handlePhotoFiles(e.dataTransfer.files); });
+    photosFileInput.addEventListener('change', () => handlePhotoFiles(photosFileInput.files));
+
+    function handlePhotoFiles(files) {
+      const p = PROJECTS.find(x => x.id === currentPhotoProjectId);
+      if (!p) return;
+      Array.from(files).forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          p.photos.push(ev.target.result);
+          renderPhotoGrid(p);
+        };
+        reader.readAsDataURL(file);
+      });
+      showToast(`${files.length} photo${files.length > 1 ? 's' : ''} uploaded`);
+      photosUploadZone.style.display = 'none';
+    }
+
+    /* ── Delete project confirm ── */
+    let pendingDeleteId = null;
+    const confirmOverlay = document.getElementById('confirmOverlay');
+
+    function confirmDelete(id) {
+      const p = PROJECTS.find(x => x.id === id);
+      if (!p) return;
+      pendingDeleteId = id;
+      document.getElementById('confirmTitle').textContent = `Delete "${p.title}"?`;
+      document.getElementById('confirmMsg').textContent = `This will permanently remove this project and all ${p.photos.length} photos.`;
+      confirmOverlay.classList.add('show');
+    }
+    document.getElementById('confirmCancel').addEventListener('click', () => { confirmOverlay.classList.remove('show'); pendingDeleteId = null; });
+    document.getElementById('confirmOk').addEventListener('click', () => {
+      if (pendingDeleteId) {
+        PROJECTS = PROJECTS.filter(p => p.id !== pendingDeleteId);
+        renderProjectsTable();
+        showToast('Project deleted');
+        confirmOverlay.classList.remove('show');
+        pendingDeleteId = null;
+      }
+    });
+
+    /* ── Toast ── */
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    /* ── Init on load ── */
+    renderProjectsTable();
+    initDashboard();
+  </script>
+</body>
+</html>

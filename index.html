@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aeroreel Media — Aerial &amp; Visual Storytelling</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    (function(){
+      // Disable right-click
+      document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+      // Disable keyboard shortcuts
+      document.addEventListener('keydown', function(e){
+        var k = e.key ? e.key.toLowerCase() : '';
+        if (e.key === 'F12') { e.preventDefault(); return false; }
+        if (e.ctrlKey && ['u','s','a','p'].includes(k)) { e.preventDefault(); return false; }
+        if (e.ctrlKey && e.shiftKey && ['i','j','c','k'].includes(k)) { e.preventDefault(); return false; }
+        if (e.metaKey && ['u','s','a','p'].includes(k)) { e.preventDefault(); return false; }
+        if (e.metaKey && e.shiftKey && ['i','j','c'].includes(k)) { e.preventDefault(); return false; }
+      });
+      // Disable image drag
+      document.addEventListener('dragstart', function(e){
+        if (e.target.tagName === 'IMG') e.preventDefault();
+      });
+      // Remove #home from URL on load
+      if (location.hash === '#home') {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo">
+        <span class="logo-text">AEROREEL</span>
+        <span class="logo-sub">MEDIA</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#events">Events</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#booking" class="btn-nav">Book Now</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose">&times;</button>
+    <ul>
+      <li><a href="#events" class="mobile-link">Events</a></li>
+      <li><a href="#portfolio" class="mobile-link">Portfolio</a></li>
+      <li><a href="#about" class="mobile-link">About</a></li>
+      <li><a href="#contact" class="mobile-link">Contact</a></li>
+      <li><a href="#booking" class="mobile-link highlight">Book Now</a></li>
+    </ul>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=1920&q=80" alt="Aerial view" class="hero-img">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <p class="hero-eyebrow reveal">Hong Kong's Premier Aerial Media Studio</p>
+      <h1 class="hero-title reveal">Transform Your Vision<br><em>Into Stunning Visuals</em></h1>
+      <p class="hero-desc reveal">Professional drone photography &amp; videography for weddings, real estate, corporate events, and beyond.</p>
+      <div class="hero-actions reveal">
+        <a href="#booking" class="btn btn-primary">Book a Session</a>
+        <a href="#portfolio" class="btn btn-ghost">View Portfolio</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Events -->
+  <section class="section events" id="events">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-eyebrow">What We Do</p>
+        <h2 class="section-title">Events We Cover</h2>
+        <p class="section-desc">From intimate ceremonies to large-scale commercial projects — we bring a unique aerial perspective to every occasion.</p>
+      </div>
+      <div class="events-grid">
+        <div class="event-card reveal" data-delay="0">
+          <div class="event-img-wrap">
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=70" alt="Wedding">
+          </div>
+          <div class="event-body">
+            <span class="event-tag">Wedding</span>
+            <h3>Weddings &amp; Ceremonies</h3>
+            <p>Capture your special day from breathtaking aerial perspectives — venues, outdoor ceremonies, and reception highlights.</p>
+          </div>
+        </div>
+        <div class="event-card reveal" data-delay="100">
+          <div class="event-img-wrap">
+            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&q=70" alt="Real Estate">
+          </div>
+          <div class="event-body">
+            <span class="event-tag">Real Estate</span>
+            <h3>Property &amp; Real Estate</h3>
+            <p>Showcase properties with stunning aerial views. Ideal for luxury homes, commercial spaces, and new developments.</p>
+          </div>
+        </div>
+        <div class="event-card reveal" data-delay="200">
+          <div class="event-img-wrap">
+            <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=600&q=70" alt="Corporate">
+          </div>
+          <div class="event-body">
+            <span class="event-tag">Corporate</span>
+            <h3>Corporate &amp; Commercial</h3>
+            <p>Elevate your brand story with professional aerial content for campaigns, events, and company profiles.</p>
+          </div>
+        </div>
+        <div class="event-card reveal" data-delay="0">
+          <div class="event-img-wrap">
+            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=70" alt="Construction">
+          </div>
+          <div class="event-body">
+            <span class="event-tag">Construction</span>
+            <h3>Construction &amp; Development</h3>
+            <p>Document your project's progress from above. Regular aerial surveys for developers, contractors, and investors.</p>
+          </div>
+        </div>
+        <div class="event-card reveal" data-delay="100">
+          <div class="event-img-wrap">
+            <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=600&q=70" alt="Festival">
+          </div>
+          <div class="event-body">
+            <span class="event-tag">Festival</span>
+            <h3>Festivals &amp; Live Events</h3>
+            <p>Capture the energy of large gatherings, concerts, and outdoor festivals with dramatic aerial coverage.</p>
+          </div>
+        </div>
+        <div class="event-card reveal" data-delay="200">
+          <div class="event-img-wrap">
+            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=70" alt="Portrait">
+          </div>
+          <div class="event-body">
+            <span class="event-tag">Portrait</span>
+            <h3>Portraits &amp; Fashion</h3>
+            <p>Creative portrait sessions with unique backdrops — combine aerial and ground photography for editorial-quality results.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio -->
+  <section class="section portfolio" id="portfolio">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-eyebrow">Our Work</p>
+        <h2 class="section-title">Projects</h2>
+        <p class="section-desc">Browse our work by event type. Click any project to view the full gallery.</p>
+      </div>
+      <div class="portfolio-filters reveal" id="portfolioFilters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="Wedding">Weddings</button>
+        <button class="filter-btn" data-filter="Real Estate">Real Estate</button>
+        <button class="filter-btn" data-filter="Corporate">Corporate</button>
+        <button class="filter-btn" data-filter="Construction">Construction</button>
+        <button class="filter-btn" data-filter="Festival">Festivals</button>
+        <button class="filter-btn" data-filter="Portrait">Portrait</button>
+      </div>
+      <div class="projects-grid" id="projectsGrid"></div>
+    </div>
+  </section>
+
+  <!-- Project Detail Modal -->
+  <div class="project-modal" id="projectModal">
+    <div class="project-modal-inner">
+      <div class="project-modal-header" id="projectModalHeader">
+        <button class="modal-back" id="modalBack">
+          <span>&larr;</span> All Projects
+        </button>
+        <div class="modal-breadcrumb" id="modalBreadcrumb"></div>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="project-modal-body">
+        <div class="project-modal-info" id="projectModalInfo"></div>
+        <div class="project-photo-grid" id="projectPhotoGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking -->
+  <section class="section booking" id="booking">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-eyebrow">Get Started</p>
+        <h2 class="section-title">Book Your Session</h2>
+        <p class="section-desc">Tell us about your project and we'll get back to you within 24 hours.</p>
+      </div>
+      <div class="booking-wrap reveal">
+        <div class="booking-steps">
+          <div class="step active" data-step="1">
+            <span class="step-num">01</span>
+            <span class="step-label">Event Type</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step" data-step="2">
+            <span class="step-num">02</span>
+            <span class="step-label">Details</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step" data-step="3">
+            <span class="step-num">03</span>
+            <span class="step-label">Contact</span>
+          </div>
+        </div>
+
+        <form class="booking-form" id="bookingForm" novalidate>
+          <!-- Step 1 -->
+          <div class="form-step active" id="step1">
+            <h3>What type of event is this?</h3>
+            <div class="event-type-grid">
+              <label class="event-type-card">
+                <input type="radio" name="eventType" value="wedding">
+                <span class="card-inner"><span class="card-icon">✦</span><span class="card-name">Wedding</span></span>
+              </label>
+              <label class="event-type-card">
+                <input type="radio" name="eventType" value="realestate">
+                <span class="card-inner"><span class="card-icon">⬛</span><span class="card-name">Real Estate</span></span>
+              </label>
+              <label class="event-type-card">
+                <input type="radio" name="eventType" value="corporate">
+                <span class="card-inner"><span class="card-icon">◈</span><span class="card-name">Corporate</span></span>
+              </label>
+              <label class="event-type-card">
+                <input type="radio" name="eventType" value="construction">
+                <span class="card-inner"><span class="card-icon">▣</span><span class="card-name">Construction</span></span>
+              </label>
+              <label class="event-type-card">
+                <input type="radio" name="eventType" value="festival">
+                <span class="card-inner"><span class="card-icon">✿</span><span class="card-name">Festival</span></span>
+              </label>
+              <label class="event-type-card">
+                <input type="radio" name="eventType" value="portrait">
+                <span class="card-inner"><span class="card-icon">◎</span><span class="card-name">Portrait</span></span>
+              </label>
+            </div>
+            <p class="step-error" id="step1Error"></p>
+            <button type="button" class="btn btn-primary next-step" data-next="2">Next Step &rarr;</button>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="form-step" id="step2">
+            <h3>Project details</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Preferred Date</label>
+                <input type="date" name="date">
+              </div>
+              <div class="form-group">
+                <label>Location / Area</label>
+                <input type="text" name="location" placeholder="e.g. Repulse Bay, Hong Kong">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Services Required</label>
+              <div class="checkbox-group">
+                <label class="checkbox-item"><input type="checkbox" name="service" value="drone_photo"> Drone Photography</label>
+                <label class="checkbox-item"><input type="checkbox" name="service" value="drone_video"> Drone Videography</label>
+                <label class="checkbox-item"><input type="checkbox" name="service" value="ground_photo"> Ground Photography</label>
+                <label class="checkbox-item"><input type="checkbox" name="service" value="post_prod"> Post-Production</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Additional Notes</label>
+              <textarea name="notes" rows="4" placeholder="Tell us more about your project..."></textarea>
+            </div>
+            <div class="form-nav">
+              <button type="button" class="btn btn-ghost prev-step" data-prev="1">&larr; Back</button>
+              <button type="button" class="btn btn-primary next-step" data-next="3">Next Step &rarr;</button>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="form-step" id="step3">
+            <h3>Your contact information</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" name="name" placeholder="Your name" required>
+              </div>
+              <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" name="email" placeholder="your@email.com" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" name="phone" placeholder="+852 xxxx xxxx">
+            </div>
+            <div class="form-group">
+              <label class="checkbox-item newsletter-opt">
+                <input type="checkbox" name="newsletter" checked>
+                Subscribe to updates and exclusive offers
+              </label>
+            </div>
+            <div class="form-nav">
+              <button type="button" class="btn btn-ghost prev-step" data-prev="2">&larr; Back</button>
+              <button type="submit" class="btn btn-primary">Send Inquiry &#10003;</button>
+            </div>
+          </div>
+
+          <!-- Success -->
+          <div class="form-step" id="stepSuccess">
+            <div class="success-msg">
+              <div class="success-icon">&#10003;</div>
+              <h3>Inquiry Sent!</h3>
+              <p>Thank you! We'll get back to you within 24 hours at the email you provided.</p>
+              <a href="#portfolio" class="btn btn-ghost">View Our Portfolio</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-img-wrap reveal">
+          <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=800&q=70" alt="About Aeroreel">
+          <div class="about-img-accent"></div>
+        </div>
+        <div class="about-content reveal">
+          <p class="section-eyebrow">Our Story</p>
+          <h2 class="section-title">Born From a Passion<br><em>For New Perspectives</em></h2>
+          <p>Founded in Hong Kong in 2017, Aeroreel Media began with a simple belief: every story deserves to be told from the perfect angle. Our founder Andy started with a drone and a dream — and has since grown into a full-service visual storytelling studio.</p>
+          <p>We combine technical expertise with creative vision to deliver content that doesn't just document — it captivates.</p>
+          <div class="stats-row">
+            <div class="stat">
+              <span class="stat-num" data-target="7">0</span><span class="stat-plus">+</span>
+              <span class="stat-label">Years Experience</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num" data-target="500">0</span><span class="stat-plus">+</span>
+              <span class="stat-label">Projects Completed</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num" data-target="100">0</span><span class="stat-plus">%</span>
+              <span class="stat-label">Client Satisfaction</span>
+            </div>
+          </div>
+          <a href="#booking" class="btn btn-primary">Work With Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Email Signup -->
+  <section class="section contact" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <p class="section-eyebrow">Get In Touch</p>
+          <h2 class="section-title">Let's Create<br><em>Something Beautiful</em></h2>
+          <div class="contact-details">
+            <div class="contact-item">
+              <span class="contact-icon">✉</span>
+              <div>
+                <span class="contact-label">Email</span>
+                <span class="contact-value">Hallo@aeroreelmedia.com</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">☎</span>
+              <div>
+                <span class="contact-label">Phone (Text Only)</span>
+                <span class="contact-value">825-288-2184</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <span class="contact-icon">◍</span>
+              <div>
+                <span class="contact-label">Base</span>
+                <span class="contact-value">Hong Kong</span>
+              </div>
+            </div>
+          </div>
+          <div class="social-row">
+            <a href="#" class="social-pill">Instagram</a>
+            <a href="#" class="social-pill">YouTube</a>
+            <a href="#" class="social-pill">Facebook</a>
+          </div>
+        </div>
+        <div class="email-signup reveal">
+          <h3>Stay Inspired</h3>
+          <p>Subscribe to receive our latest work, behind-the-scenes content, and exclusive offers.</p>
+          <form class="signup-form" id="signupForm" novalidate>
+            <input type="text" name="subName" placeholder="Your Name" autocomplete="name">
+            <input type="email" name="subEmail" placeholder="Your Email Address" required autocomplete="email">
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+            <p class="signup-note">No spam, unsubscribe anytime.</p>
+          </form>
+          <div class="signup-success" id="signupSuccess">
+            <span class="check-icon">&#10003;</span> You're on the list — we'll be in touch soon.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="#home" class="nav-logo">
+            <span class="logo-text">AEROREEL</span>
+            <span class="logo-sub">MEDIA</span>
+          </a>
+          <p class="footer-tagline">Your Story, Our Lens.</p>
+        </div>
+        <nav class="footer-nav">
+          <a href="#events">Events</a>
+          <a href="#portfolio">Portfolio</a>
+          <a href="#about">About</a>
+          <a href="#booking">Book Now</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <div class="footer-social">
+          <a href="#">Instagram</a>
+          <a href="#">YouTube</a>
+          <a href="#">Facebook</a>
+          <a href="admin/index.html" class="admin-link">Admin ↗</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Aeroreel Media. All rights reserved.</p>
+        <p class="demo-badge">[ DEMO — Framework Preview ]</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <div class="lightbox-content" id="lightboxContent"></div>
+    <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous">&#8249;</button>
+    <button class="lightbox-nav next" id="lightboxNext" aria-label="Next">&#8250;</button>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
