@@ -1,0 +1,7 @@
+# Don't cache markup/scripts/styles — avoids stale pages during UAT.
+# (Works on IONOS Apache too. For production you may want to cache assets.)
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|js|css)$">
+    Header set Cache-Control "no-store, must-revalidate"
+  </FilesMatch>
+</IfModule>

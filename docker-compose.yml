@@ -1,0 +1,47 @@
+# Local UAT stack — mirrors IONOS (Apache + PHP + MySQL).
+#   Public site : http://localhost:8080/
+#   Admin       : http://localhost:8080/admin/
+#   phpMyAdmin  : http://localhost:8081/   (server: db, user: aeroreel / aeroreelpass)
+#
+# Start:  docker compose up -d --build
+# Stop:   docker compose down            (add -v to also wipe the database)
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_NAME: aeroreel
+      DB_USER: aeroreel
+      DB_PASS: aeroreelpass
+      ADMIN_EMAIL: Hallo@aeroreelmedia.com
+      ADMIN_PASSWORD: admin123
+      NOTIFY_EMAIL: Hallo@aeroreelmedia.com
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: aeroreel
+      MYSQL_USER: aeroreel
+      MYSQL_PASSWORD: aeroreelpass
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  pma:
+    image: phpmyadmin:latest
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
+
+volumes:
+  dbdata:

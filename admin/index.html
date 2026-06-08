@@ -179,6 +179,10 @@
     .photo-mgmt-item:hover .photo-delete { opacity: 1; }
     .photo-mgmt-item .photo-delete:hover { color: var(--red); }
     .photo-num { position: absolute; bottom: 6px; left: 8px; font-size: 10px; color: rgba(255,255,255,0.5); }
+    .photo-mgmt-item .video-fallback { width: 100%; height: 100%; background: linear-gradient(135deg, var(--bg-3), #0c0c0c); }
+    .photo-mgmt-item .play-badge { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 20px; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,0.6); pointer-events: none; }
+    .video-add-row { display: flex; gap: 8px; margin-bottom: 16px; }
+    .video-add-row .form-input { flex: 1; }
 
     /* ── Search ── */
     .search-wrap { position: relative; }
@@ -223,9 +227,9 @@
       </div>
       <p class="login-badge">Admin Portal</p>
       <input type="email" id="loginEmail" placeholder="Email address" value="Hallo@aeroreelmedia.com">
-      <input type="password" id="loginPass" placeholder="Password" value="••••••••">
+      <input type="password" id="loginPass" placeholder="Password">
       <button class="btn-login" id="loginBtn">Sign In</button>
-      <p class="login-hint">Demo: click Sign In with any credentials</p>
+      <p class="login-hint">UAT default password: admin123</p>
     </div>
   </div>
 
@@ -267,19 +271,19 @@
 
         <div class="stat-cards">
           <div class="stat-card">
-            <p class="stat-card-label">New Bookings</p>
-            <p class="stat-card-value">12</p>
-            <p class="stat-card-sub"><span class="dot dot-green"></span>3 this week</p>
+            <p class="stat-card-label">Bookings</p>
+            <p class="stat-card-value" id="dashBookingCount">0</p>
+            <p class="stat-card-sub"><span class="dot dot-green"></span>Total inquiries</p>
           </div>
           <div class="stat-card">
             <p class="stat-card-label">Email Subscribers</p>
-            <p class="stat-card-value">284</p>
-            <p class="stat-card-sub"><span class="dot dot-accent"></span>+18 this month</p>
+            <p class="stat-card-value" id="dashSubCount">0</p>
+            <p class="stat-card-sub"><span class="dot dot-accent"></span>On the list</p>
           </div>
           <div class="stat-card">
             <p class="stat-card-label">Active Projects</p>
             <p class="stat-card-value" id="dashProjectCount">10</p>
-            <p class="stat-card-sub"><span class="dot dot-blue"></span>Across 6 categories</p>
+            <p class="stat-card-sub"><span class="dot dot-blue"></span>Across 4 sectors</p>
           </div>
           <div class="stat-card">
             <p class="stat-card-label">Total Photos</p>
@@ -295,13 +299,8 @@
           </div>
           <div class="card-body" style="padding:0">
             <table class="data-table">
-              <thead><tr><th>Name</th><th>Event</th><th>Date</th><th>Status</th><th></th></tr></thead>
-              <tbody>
-                <tr><td class="td-main">Sarah Chan</td><td>Wedding</td><td>15 Jun 2024</td><td><span class="badge badge-new">New</span></td><td><button class="action-btn" onclick="showToast('Email window opened')">Reply</button></td></tr>
-                <tr><td class="td-main">Tommy Lee</td><td>Real Estate</td><td>22 Jun 2024</td><td><span class="badge badge-review">In Review</span></td><td><button class="action-btn" onclick="showToast('Email window opened')">Reply</button></td></tr>
-                <tr><td class="td-main">Priya Sharma</td><td>Corporate</td><td>8 Jul 2024</td><td><span class="badge badge-new">New</span></td><td><button class="action-btn" onclick="showToast('Email window opened')">Reply</button></td></tr>
-                <tr><td class="td-main">Mark Tong</td><td>Construction</td><td>Ongoing</td><td><span class="badge badge-done">Confirmed</span></td><td><button class="action-btn">View</button></td></tr>
-              </tbody>
+              <thead><tr><th>Name</th><th>Industry</th><th>Date</th><th>Status</th><th></th></tr></thead>
+              <tbody id="dashRecentBookings"></tbody>
             </table>
           </div>
         </div>
@@ -326,6 +325,7 @@
               <p class="page-subtitle" id="projectCountLabel">10 projects</p>
             </div>
             <div class="topbar-right">
+              <button class="btn-sm btn-danger" id="btnDeleteProjects" disabled>Delete Selected</button>
               <div class="search-wrap">
                 <span class="search-icon">⌕</span>
                 <input type="text" id="projectSearch" placeholder="Search projects...">
@@ -338,12 +338,13 @@
               <table class="data-table" id="projectsTable">
                 <thead>
                   <tr>
+                    <th style="width:36px"><input type="checkbox" id="checkAllProjects"></th>
                     <th style="width:70px">Cover</th>
                     <th>Title</th>
-                    <th>Category</th>
+                    <th>Industry</th>
                     <th>Location</th>
                     <th>Date</th>
-                    <th>Photos</th>
+                    <th>Items</th>
                     <th style="width:180px"></th>
                   </tr>
                 </thead>
@@ -369,23 +370,21 @@
                 <div class="form-grid">
                   <div class="form-group">
                     <label class="form-label">Project Title *</label>
-                    <input class="form-input" id="fTitle" placeholder="e.g. Sarah & Tom">
+                    <input class="form-input" id="fTitle" placeholder="e.g. Skyline Tower — Site Progress">
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Category *</label>
+                    <label class="form-label">Industry *</label>
                     <select class="form-input" id="fCategory">
-                      <option value="">— Select category —</option>
-                      <option>Wedding</option>
-                      <option>Real Estate</option>
-                      <option>Corporate</option>
+                      <option value="">— Select industry —</option>
                       <option>Construction</option>
-                      <option>Festival</option>
-                      <option>Portrait</option>
+                      <option>Hospitality</option>
+                      <option>Commercial &amp; Brand</option>
+                      <option>Corporate Events</option>
                     </select>
                   </div>
                   <div class="form-group">
                     <label class="form-label">Location</label>
-                    <input class="form-input" id="fLocation" placeholder="e.g. Repulse Bay, Hong Kong">
+                    <input class="form-input" id="fLocation" placeholder="e.g. Calgary, AB / Central, Hong Kong">
                   </div>
                   <div class="form-group">
                     <label class="form-label">Date</label>
@@ -402,10 +401,12 @@
                   <div class="form-group">
                     <label class="form-label">Services</label>
                     <div class="form-input-check" style="padding:12px 0">
-                      <label class="check-label"><input type="checkbox" value="Drone Photography"> Drone Photography</label>
-                      <label class="check-label"><input type="checkbox" value="Drone Videography"> Drone Videography</label>
-                      <label class="check-label"><input type="checkbox" value="Ground Photography"> Ground Photography</label>
-                      <label class="check-label"><input type="checkbox" value="Post-Production"> Post-Production</label>
+                      <label class="check-label"><input type="checkbox" value="Cinematic Video Production"> Cinematic Video Production</label>
+                      <label class="check-label"><input type="checkbox" value="Site Progress & Drone Media"> Site Progress &amp; Drone Media</label>
+                      <label class="check-label"><input type="checkbox" value="Commercial Photography"> Commercial Photography</label>
+                      <label class="check-label"><input type="checkbox" value="Short-Form Video Marketing"> Short-Form Video Marketing</label>
+                      <label class="check-label"><input type="checkbox" value="Social Media Management"> Social Media Management</label>
+                      <label class="check-label"><input type="checkbox" value="Web Design & Google SEO"> Web Design &amp; Google SEO</label>
                     </div>
                   </div>
                   <div class="form-group full">
@@ -451,6 +452,10 @@
                 <p>JPG, PNG, WEBP — up to 20MB each</p>
                 <input type="file" id="photosFileInput" multiple accept="image/*" style="display:none">
               </div>
+              <div class="video-add-row">
+                <input type="text" class="form-input" id="videoUrlInput" placeholder="Paste a YouTube or Vimeo link to add a video…">
+                <button class="btn-sm btn-accent" id="btnAddVideo">+ Add Video</button>
+              </div>
               <div class="photo-management-grid" id="photoManagementGrid"></div>
             </div>
           </div>
@@ -466,6 +471,7 @@
             <p class="page-subtitle">Manage all incoming inquiries</p>
           </div>
           <div class="topbar-right">
+            <button class="btn-sm btn-danger" id="btnDeleteBookings" disabled>Delete Selected</button>
             <div class="search-wrap">
               <span class="search-icon">⌕</span>
               <input type="text" placeholder="Search...">
@@ -475,15 +481,8 @@
         <div class="card">
           <div class="card-body" style="padding:0">
             <table class="data-table">
-              <thead><tr><th>Name</th><th>Email</th><th>Event Type</th><th>Date</th><th>Location</th><th>Newsletter</th><th>Status</th><th></th></tr></thead>
-              <tbody>
-                <tr><td class="td-main">Sarah Chan</td><td class="td-email">sarah.chan@gmail.com</td><td>Wedding</td><td>15 Jun 2024</td><td>Repulse Bay</td><td>✓</td><td><span class="badge badge-new">New</span></td><td><button class="action-btn" onclick="showToast('Email composed')">Reply</button></td></tr>
-                <tr><td class="td-main">Tommy Lee</td><td class="td-email">tommy@propertyco.hk</td><td>Real Estate</td><td>22 Jun 2024</td><td>Mid-Levels</td><td>✓</td><td><span class="badge badge-review">In Review</span></td><td><button class="action-btn" onclick="showToast('Email composed')">Reply</button></td></tr>
-                <tr><td class="td-main">Priya Sharma</td><td class="td-email">priya@corp.com</td><td>Corporate</td><td>8 Jul 2024</td><td>Wan Chai</td><td>—</td><td><span class="badge badge-new">New</span></td><td><button class="action-btn" onclick="showToast('Email composed')">Reply</button></td></tr>
-                <tr><td class="td-main">Mark Tong</td><td class="td-email">m.tong@developer.hk</td><td>Construction</td><td>Ongoing</td><td>Kowloon Bay</td><td>✓</td><td><span class="badge badge-done">Confirmed</span></td><td><button class="action-btn">View</button></td></tr>
-                <tr><td class="td-main">Clara Ng</td><td class="td-email">clara@studio.co</td><td>Portrait</td><td>29 Jun 2024</td><td>Victoria Peak</td><td>✓</td><td><span class="badge badge-done">Confirmed</span></td><td><button class="action-btn">View</button></td></tr>
-                <tr><td class="td-main">Alex Poon</td><td class="td-email">alex.p@event.org</td><td>Festival</td><td>20 Jul 2024</td><td>West Kowloon</td><td>—</td><td><span class="badge badge-new">New</span></td><td><button class="action-btn" onclick="showToast('Email composed')">Reply</button></td></tr>
-              </tbody>
+              <thead><tr><th style="width:36px"><input type="checkbox" id="checkAllBookings"></th><th>Name</th><th>Email</th><th>Industry</th><th>Date</th><th>Location</th><th>Newsletter</th><th>Status</th><th></th></tr></thead>
+              <tbody id="bookingsTableBody"></tbody>
             </table>
           </div>
         </div>
@@ -497,6 +496,7 @@
             <p class="page-subtitle">284 active subscribers</p>
           </div>
           <div class="topbar-right">
+            <button class="btn-sm btn-danger" id="btnDeleteSubscribers" disabled>Delete Selected</button>
             <button class="btn-sm btn-outline" onclick="showToast('CSV exported')">Export CSV</button>
             <button class="btn-sm btn-accent" onclick="showToast('Compose window opened')">+ Compose Blast</button>
           </div>
@@ -508,15 +508,8 @@
           </div>
           <div class="card-body" style="padding:0">
             <table class="data-table">
-              <thead><tr><th>Name</th><th>Email</th><th>Source</th><th>Subscribed</th><th>Status</th><th></th></tr></thead>
-              <tbody>
-                <tr><td class="td-main">Amy Wong</td><td class="td-email">amy.wong@email.com</td><td>Website Signup</td><td>25 May 2024</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="showToast('Email sent to Amy')">Email</button></td></tr>
-                <tr><td class="td-main">Daniel Ho</td><td class="td-email">d.ho@company.hk</td><td>Booking Form</td><td>24 May 2024</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="showToast('Email sent to Daniel')">Email</button></td></tr>
-                <tr><td class="td-main">Jessica Lam</td><td class="td-email">jessica@studio.co</td><td>Website Signup</td><td>23 May 2024</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="showToast('Email sent')">Email</button></td></tr>
-                <tr><td class="td-main">Kevin Chan</td><td class="td-email">kevin.c@hotmail.com</td><td>Booking Form</td><td>20 May 2024</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="showToast('Email sent')">Email</button></td></tr>
-                <tr><td class="td-main">Rachel Yip</td><td class="td-email">r.yip@gmail.com</td><td>Website Signup</td><td>18 May 2024</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="showToast('Email sent')">Email</button></td></tr>
-                <tr><td class="td-main">Marcus Liu</td><td class="td-email">marcus@design.hk</td><td>Booking Form</td><td>15 May 2024</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="showToast('Email sent')">Email</button></td></tr>
-              </tbody>
+              <thead><tr><th style="width:36px"><input type="checkbox" id="checkAllSubscribers"></th><th>Name</th><th>Email</th><th>Source</th><th>Subscribed</th><th>Status</th><th></th></tr></thead>
+              <tbody id="subscribersTableBody"></tbody>
             </table>
           </div>
         </div>
@@ -534,7 +527,7 @@
               <div class="form-group"><label class="form-label">Business Name</label><input class="form-input" value="Aeroreel Media"></div>
               <div class="form-group"><label class="form-label">Contact Email</label><input class="form-input" type="email" value="Hallo@aeroreelmedia.com"></div>
               <div class="form-group"><label class="form-label">Phone (Text Only)</label><input class="form-input" type="tel" value="825-288-2184"></div>
-              <div class="form-group"><label class="form-label">Location</label><input class="form-input" value="Hong Kong"></div>
+              <div class="form-group"><label class="form-label">Location</label><input class="form-input" value="Calgary / Hong Kong"></div>
               <div class="form-group" style="grid-column:span 2"><label class="form-label">Tagline</label><input class="form-input" value="Your Story, Our Lens."></div>
             </div>
             <div class="settings-footer">
@@ -572,34 +565,81 @@
     </div>
   </div>
 
+  <!-- Edit Dialog (bookings / subscribers) -->
+  <div class="confirm-overlay" id="editOverlay">
+    <div class="confirm-box" style="max-width:440px">
+      <h4 id="editTitle">Edit</h4>
+      <div id="editFields" style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px;max-height:60vh;overflow:auto"></div>
+      <div class="confirm-actions">
+        <button class="btn-sm btn-outline" id="editCancel">Cancel</button>
+        <button class="btn-sm btn-accent" id="editSave">Save</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
   <script>
-    /* ── Project data (mirrors main site) ── */
-    let PROJECTS = [
-      { id:'w1', category:'Wedding', type:'Photo', title:'Sarah & Tom', location:'Repulse Bay, Hong Kong', date:'March 2024', services:['Drone Photography','Ground Photography'], cover:'https://images.unsplash.com/photo-1519741497674-611481863552?w=300&q=60', photos: Array.from({length:8},(_,i)=>`https://picsum.photos/seed/w1${String.fromCharCode(97+i)}/400/300`) },
-      { id:'w2', category:'Wedding', type:'Photo + Video', title:'Emma & James', location:'The Peak, Hong Kong', date:'November 2023', services:['Drone Videography','Drone Photography','Post-Production'], cover:'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=300&q=60', photos: Array.from({length:6},(_,i)=>`https://picsum.photos/seed/w2${String.fromCharCode(97+i)}/400/300`) },
-      { id:'w3', category:'Wedding', type:'Photo', title:'Clara & David', location:'Discovery Bay, Lantau', date:'June 2024', services:['Drone Photography','Ground Photography'], cover:'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=300&q=60', photos: Array.from({length:7},(_,i)=>`https://picsum.photos/seed/w3${String.fromCharCode(97+i)}/400/300`) },
-      { id:'re1', category:'Real Estate', type:'Photo + Video', title:'23/F The Centrium', location:'Central, Hong Kong', date:'April 2024', services:['Drone Photography','Ground Photography','Post-Production'], cover:'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=300&q=60', photos: Array.from({length:9},(_,i)=>`https://picsum.photos/seed/re1${String.fromCharCode(97+i)}/400/300`) },
-      { id:'re2', category:'Real Estate', type:'Photo', title:'Clearwater Bay Villa', location:'Sai Kung, Hong Kong', date:'January 2024', services:['Drone Photography','Ground Photography'], cover:'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=300&q=60', photos: Array.from({length:6},(_,i)=>`https://picsum.photos/seed/re2${String.fromCharCode(97+i)}/400/300`) },
-      { id:'co1', category:'Corporate', type:'Photo + Video', title:'HSBC Annual Gala 2024', location:'Wan Chai, Hong Kong', date:'February 2024', services:['Drone Videography','Ground Photography','Post-Production'], cover:'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=300&q=60', photos: Array.from({length:6},(_,i)=>`https://picsum.photos/seed/co1${String.fromCharCode(97+i)}/400/300`) },
-      { id:'co2', category:'Corporate', type:'Video', title:'Nike HK Product Launch', location:'Causeway Bay, Hong Kong', date:'May 2024', services:['Drone Videography','Post-Production'], cover:'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=300&q=60', photos: Array.from({length:5},(_,i)=>`https://picsum.photos/seed/co2${String.fromCharCode(97+i)}/400/300`) },
-      { id:'cn1', category:'Construction', type:'Photo', title:'Kowloon Bay Development', location:'Kowloon Bay, Hong Kong', date:'Ongoing 2023–2024', services:['Drone Photography'], cover:'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=300&q=60', photos: Array.from({length:8},(_,i)=>`https://picsum.photos/seed/cn1${String.fromCharCode(97+i)}/400/300`) },
-      { id:'fe1', category:'Festival', type:'Photo + Video', title:'Clockenflap 2023', location:'West Kowloon, Hong Kong', date:'November 2023', services:['Drone Videography','Ground Photography','Post-Production'], cover:'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=300&q=60', photos: Array.from({length:6},(_,i)=>`https://picsum.photos/seed/fe1${String.fromCharCode(97+i)}/400/300`) },
-      { id:'po1', category:'Portrait', type:'Photo', title:'Urban Landscapes Series', location:'Various, Hong Kong', date:'April 2024', services:['Ground Photography','Drone Photography'], cover:'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&q=60', photos: Array.from({length:6},(_,i)=>`https://picsum.photos/seed/po1${String.fromCharCode(97+i)}/400/300`) },
-    ];
+    /* ── Live data from the PHP/MySQL API ── */
+    let PROJECTS = [];      // each project's `media` array is mapped to `photos` for this UI
+    let BOOKINGS = [];
+    let SUBSCRIBERS = [];
 
-    /* ── Login / Logout ── */
-    document.getElementById('loginBtn').addEventListener('click', () => {
-      document.getElementById('loginScreen').classList.add('hidden');
+    async function apiGet(path) {
+      const r = await fetch('/api/' + path);
+      return r.json();
+    }
+    async function apiSend(path, method, data) {
+      const r = await fetch('/api/' + path, {
+        method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data || {})
+      });
+      return r.json();
+    }
+    async function persistProject(p) {
+      return apiSend('projects.php', 'POST', {
+        id: p.id, category: p.category, type: p.type, title: p.title,
+        location: p.location, date: p.date, services: p.services || [],
+        cover: p.cover, media: p.photos || [], sort_order: p.sort_order
+      });
+    }
+    async function reloadAll() {
+      const projects = await apiGet('projects.php');
+      PROJECTS = (Array.isArray(projects) ? projects : []).map(p => ({ ...p, photos: p.media || [] }));
+      BOOKINGS = await apiGet('bookings.php').catch(() => []);
+      SUBSCRIBERS = await apiGet('subscribers.php').catch(() => []);
+      if (!Array.isArray(BOOKINGS)) BOOKINGS = [];
+      if (!Array.isArray(SUBSCRIBERS)) SUBSCRIBERS = [];
+      renderProjectsTable();
+      renderBookings();
+      renderSubscribers();
       initDashboard();
+    }
+
+    /* ── Media helper: detect YouTube/Vimeo links (same logic as the public site) ── */
+    function resolveMedia(url) {
+      let m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/);
+      if (m) return { type:'video', poster:`https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` };
+      m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+      if (m) return { type:'video', poster:null };
+      return { type:'image', src:url };
+    }
+
+    /* ── Login / Logout (real session auth) ── */
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPass').value;
+      const res = await apiSend('auth.php?action=login', 'POST', { email, password });
+      if (!res || !res.ok) { showToast((res && res.error) || 'Login failed'); return; }
+      document.getElementById('loginScreen').classList.add('hidden');
+      reloadAll();
     });
     document.addEventListener('keydown', e => {
       if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden'))
         document.getElementById('loginBtn').click();
     });
-    document.getElementById('logoutBtn').addEventListener('click', () => {
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await apiSend('auth.php?action=logout', 'POST', {});
       document.getElementById('loginScreen').classList.remove('hidden');
     });
 
@@ -621,23 +661,81 @@
       document.getElementById(`view-${name}`).classList.add('active');
     }
 
+    /* ── Date formatting ── */
+    function fmtDate(s) {
+      if (!s) return '';
+      const d = new Date(s);
+      return isNaN(d) ? s : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+    const badgeFor = status => status === 'Confirmed' ? 'badge-done' : status === 'In Review' ? 'badge-review' : 'badge-new';
+
     /* ── Init dashboard ── */
     function initDashboard() {
       const totalPhotos = PROJECTS.reduce((sum, p) => sum + p.photos.length, 0);
       document.getElementById('dashPhotoCount').textContent = totalPhotos;
       document.getElementById('dashProjectCount').textContent = PROJECTS.length;
+      document.getElementById('dashBookingCount').textContent = BOOKINGS.length;
+      document.getElementById('dashSubCount').textContent = SUBSCRIBERS.length;
+
+      document.getElementById('dashRecentBookings').innerHTML = BOOKINGS.slice(0, 5).map(b => `
+        <tr>
+          <td class="td-main">${b.name || '—'}</td>
+          <td>${b.event_type || '—'}</td>
+          <td>${fmtDate(b.created_at)}</td>
+          <td><span class="badge ${badgeFor(b.status)}">${b.status || 'New'}</span></td>
+          <td><button class="action-btn" onclick="showToast('Email window opened')">Reply</button></td>
+        </tr>`).join('') || `<tr><td colspan="5" style="color:var(--text-3);padding:20px">No bookings yet.</td></tr>`;
 
       const recent = PROJECTS.slice(0, 5);
-      const tbody = document.getElementById('dashRecentProjects');
-      tbody.innerHTML = `<table class="data-table"><thead><tr><th style="width:70px">Cover</th><th>Title</th><th>Category</th><th>Photos</th><th></th></tr></thead><tbody>
+      document.getElementById('dashRecentProjects').innerHTML = `<table class="data-table"><thead><tr><th style="width:70px">Cover</th><th>Title</th><th>Industry</th><th>Items</th><th></th></tr></thead><tbody>
         ${recent.map(p => `<tr>
           <td><div class="thumb-cell"><img src="${p.cover}" alt="" loading="lazy"></div></td>
           <td class="td-main">${p.title}</td>
           <td><span class="cat-pill">${p.category}</span></td>
           <td>${p.photos.length}</td>
-          <td><button class="action-btn" onclick="switchTab('projects');setTimeout(()=>openPhotosView('${p.id}'),100)">Manage Photos</button></td>
+          <td><button class="action-btn" onclick="switchTab('projects');setTimeout(()=>openPhotosView('${p.id}'),100)">Manage Media</button></td>
         </tr>`).join('')}
       </tbody></table>`;
+    }
+
+    /* ── Bookings + Subscribers tables (from DB) ── */
+    function renderBookings() {
+      const tbody = document.getElementById('bookingsTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = BOOKINGS.map(b => `
+        <tr>
+          <td><input type="checkbox" class="row-check-bookings" value="${b.id}"></td>
+          <td class="td-main">${b.name || '—'}</td>
+          <td class="td-email">${b.email || ''}</td>
+          <td>${b.event_type || '—'}</td>
+          <td>${fmtDate(b.created_at)}</td>
+          <td>${b.location || '—'}</td>
+          <td>${Number(b.newsletter) ? '✓' : '—'}</td>
+          <td><span class="badge ${badgeFor(b.status)}">${b.status || 'New'}</span></td>
+          <td style="text-align:right">
+            <button class="action-btn" onclick="editBooking(${b.id})">Edit</button>
+            <button class="action-btn danger" onclick="deleteBooking(${b.id})">Delete</button>
+          </td>
+        </tr>`).join('') || `<tr><td colspan="9" style="color:var(--text-3);padding:20px">No bookings yet — submit the form on the public site.</td></tr>`;
+      resetBatch('bookings');
+    }
+    function renderSubscribers() {
+      const tbody = document.getElementById('subscribersTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = SUBSCRIBERS.map(s => `
+        <tr>
+          <td><input type="checkbox" class="row-check-subscribers" value="${s.id}"></td>
+          <td class="td-main">${s.name || '—'}</td>
+          <td class="td-email">${s.email || ''}</td>
+          <td>${s.source || 'Website'}</td>
+          <td>${fmtDate(s.created_at)}</td>
+          <td><span class="badge badge-active">Active</span></td>
+          <td style="text-align:right">
+            <button class="action-btn" onclick="editSubscriber(${s.id})">Edit</button>
+            <button class="action-btn danger" onclick="deleteSubscriber(${s.id})">Delete</button>
+          </td>
+        </tr>`).join('') || `<tr><td colspan="7" style="color:var(--text-3);padding:20px">No subscribers yet.</td></tr>`;
+      resetBatch('subscribers');
     }
 
     /* ── Render projects table ── */
@@ -647,19 +745,21 @@
       const tbody = document.getElementById('projectsTableBody');
       tbody.innerHTML = list.map(p => `
         <tr>
+          <td><input type="checkbox" class="row-check-projects" value="${p.id}"></td>
           <td><div class="thumb-cell"><img src="${p.cover}" alt="" loading="lazy"></div></td>
           <td class="td-main">${p.title}</td>
           <td><span class="cat-pill">${p.category}</span></td>
           <td>${p.location}</td>
           <td>${p.date}</td>
-          <td>${p.photos.length} photos</td>
+          <td>${p.photos.length} items</td>
           <td style="text-align:right">
             <button class="action-btn" onclick="openEditForm('${p.id}')">Edit</button>
-            <button class="action-btn" onclick="openPhotosView('${p.id}')">Photos</button>
+            <button class="action-btn" onclick="openPhotosView('${p.id}')">Media</button>
             <button class="action-btn danger" onclick="confirmDelete('${p.id}')">Delete</button>
           </td>
         </tr>
       `).join('');
+      resetBatch('projects');
     }
 
     document.getElementById('projectSearch').addEventListener('input', e => renderProjectsTable(e.target.value));
@@ -668,6 +768,7 @@
     document.getElementById('btnNewProject').addEventListener('click', () => {
       document.getElementById('editingProjectId').value = '';
       document.getElementById('projectForm').reset();
+      pendingCoverFile = null;
       document.getElementById('formTitle').textContent = 'New Project';
       document.getElementById('coverPreview').style.display = 'none';
       document.getElementById('coverUploadIcon').style.display = '';
@@ -681,12 +782,18 @@
     function openEditForm(id) {
       const p = PROJECTS.find(x => x.id === id);
       if (!p) return;
+      pendingCoverFile = null;
       document.getElementById('editingProjectId').value = id;
       document.getElementById('fTitle').value = p.title;
       document.getElementById('fCategory').value = p.category;
       document.getElementById('fLocation').value = p.location;
       document.getElementById('fDate').value = p.date;
       document.getElementById('fType').value = p.type;
+      // Services checkboxes
+      const svc = p.services || [];
+      document.querySelectorAll('#projectForm .form-input-check input[type="checkbox"]').forEach(c => {
+        c.checked = svc.includes(c.value);
+      });
       document.getElementById('formTitle').textContent = 'Edit Project';
       // Cover preview
       const prev = document.getElementById('coverPreview');
@@ -698,12 +805,14 @@
     }
 
     /* ── Cover photo upload in form ── */
+    let pendingCoverFile = null;  // uploaded to the server when the form is saved
     const coverZone = document.getElementById('coverUploadZone');
     const coverInput = document.getElementById('coverFileInput');
     coverZone.addEventListener('click', () => coverInput.click());
     coverInput.addEventListener('change', () => {
       const file = coverInput.files[0];
       if (!file) return;
+      pendingCoverFile = file;
       const reader = new FileReader();
       reader.onload = e => {
         const prev = document.getElementById('coverPreview');
@@ -715,40 +824,49 @@
       reader.readAsDataURL(file);
     });
 
-    /* ── Save project form ── */
-    document.getElementById('projectForm').addEventListener('submit', e => {
+    async function uploadFile(file) {
+      const fd = new FormData();
+      fd.append('file', file);
+      const r = await fetch('/api/upload.php', { method: 'POST', body: fd });
+      const res = await r.json();
+      if (!res.ok) throw new Error(res.error || 'upload failed');
+      return res.url;
+    }
+
+    /* ── Save project form (persists to MySQL via the API) ── */
+    document.getElementById('projectForm').addEventListener('submit', async e => {
       e.preventDefault();
       const title = document.getElementById('fTitle').value.trim();
       const category = document.getElementById('fCategory').value;
       if (!title || !category) { showToast('Please fill in title and category'); return; }
 
       const editId = document.getElementById('editingProjectId').value;
-      if (editId) {
-        const p = PROJECTS.find(x => x.id === editId);
-        if (p) {
-          p.title = title;
-          p.category = category;
-          p.location = document.getElementById('fLocation').value;
-          p.date = document.getElementById('fDate').value;
-          p.type = document.getElementById('fType').value;
-          showToast('Project updated ✓');
-        }
-      } else {
-        const newId = 'proj_' + Date.now();
-        PROJECTS.push({
-          id: newId,
-          category,
-          type: document.getElementById('fType').value,
-          title,
-          location: document.getElementById('fLocation').value,
-          date: document.getElementById('fDate').value,
-          services: [],
-          cover: 'https://picsum.photos/seed/' + newId + '/300/225',
-          photos: []
-        });
-        showToast('Project created ✓');
+      const existing = editId ? PROJECTS.find(x => x.id === editId) : null;
+      const services = [...document.querySelectorAll('#projectForm .form-input-check input[type="checkbox"]:checked')].map(c => c.value);
+
+      // Upload a new cover if one was picked; otherwise keep the existing one
+      let cover = existing ? existing.cover : '';
+      if (pendingCoverFile) {
+        try { cover = await uploadFile(pendingCoverFile); }
+        catch (err) { showToast('Cover upload failed'); return; }
       }
-      renderProjectsTable();
+
+      const project = {
+        id: editId || ('proj_' + Date.now()),
+        category, title,
+        type: document.getElementById('fType').value,
+        location: document.getElementById('fLocation').value,
+        date: document.getElementById('fDate').value,
+        services,
+        cover,
+        photos: existing ? existing.photos : [],
+        sort_order: existing ? existing.sort_order : 999
+      };
+
+      const res = await persistProject(project);
+      if (!res || !res.ok) { showToast((res && res.error) || 'Save failed'); return; }
+      showToast(editId ? 'Project updated ✓' : 'Project created ✓');
+      await reloadAll();
       showView('list');
     });
 
@@ -767,23 +885,30 @@
     }
 
     function renderPhotoGrid(p) {
-      document.getElementById('photosCount').textContent = `${p.photos.length} photo${p.photos.length !== 1 ? 's' : ''}`;
+      document.getElementById('photosCount').textContent = `${p.photos.length} item${p.photos.length !== 1 ? 's' : ''}`;
       const grid = document.getElementById('photoManagementGrid');
-      grid.innerHTML = p.photos.map((src, i) => `
-        <div class="photo-mgmt-item" data-index="${i}">
-          <img src="${src}" alt="" loading="lazy">
+      grid.innerHTML = p.photos.map((url, i) => {
+        const m = resolveMedia(url);
+        const visual = m.type === 'video'
+          ? (m.poster ? `<img src="${m.poster}" alt="" loading="lazy">` : `<div class="video-fallback"></div>`) + `<span class="play-badge">▶</span>`
+          : `<img src="${url}" alt="" loading="lazy">`;
+        return `
+        <div class="photo-mgmt-item${m.type === 'video' ? ' is-video' : ''}" data-index="${i}">
+          ${visual}
           <button class="photo-delete" onclick="deletePhoto('${p.id}',${i})" title="Delete">×</button>
           <span class="photo-num">${i + 1}</span>
-        </div>
-      `).join('');
+        </div>`;
+      }).join('');
     }
 
-    function deletePhoto(projectId, idx) {
+    async function deletePhoto(projectId, idx) {
       const p = PROJECTS.find(x => x.id === projectId);
       if (!p) return;
       p.photos.splice(idx, 1);
       renderPhotoGrid(p);
-      showToast('Photo removed');
+      await persistProject(p);
+      renderProjectsTable();
+      showToast('Item removed');
     }
 
     document.getElementById('photosBack').addEventListener('click', () => {
@@ -808,44 +933,175 @@
     photosUploadZone.addEventListener('drop', e => { e.preventDefault(); photosUploadZone.classList.remove('drag'); handlePhotoFiles(e.dataTransfer.files); });
     photosFileInput.addEventListener('change', () => handlePhotoFiles(photosFileInput.files));
 
-    function handlePhotoFiles(files) {
+    async function handlePhotoFiles(files) {
       const p = PROJECTS.find(x => x.id === currentPhotoProjectId);
       if (!p) return;
-      Array.from(files).forEach(file => {
-        if (!file.type.startsWith('image/')) return;
-        const reader = new FileReader();
-        reader.onload = ev => {
-          p.photos.push(ev.target.result);
-          renderPhotoGrid(p);
-        };
-        reader.readAsDataURL(file);
-      });
-      showToast(`${files.length} photo${files.length > 1 ? 's' : ''} uploaded`);
+      const images = Array.from(files).filter(f => f.type.startsWith('image/'));
+      if (!images.length) return;
+      let n = 0;
+      for (const file of images) {
+        try { p.photos.push(await uploadFile(file)); n++; renderPhotoGrid(p); }
+        catch (err) { /* skip failed file */ }
+      }
+      await persistProject(p);
+      renderProjectsTable();
+      showToast(`${n} photo${n !== 1 ? 's' : ''} uploaded`);
       photosUploadZone.style.display = 'none';
     }
 
-    /* ── Delete project confirm ── */
-    let pendingDeleteId = null;
+    /* Add a video by URL (YouTube / Vimeo) */
+    document.getElementById('btnAddVideo').addEventListener('click', async () => {
+      const input = document.getElementById('videoUrlInput');
+      const url = input.value.trim();
+      if (!url) return;
+      if (resolveMedia(url).type !== 'video') { showToast('Enter a valid YouTube or Vimeo link'); return; }
+      const p = PROJECTS.find(x => x.id === currentPhotoProjectId);
+      if (!p) return;
+      p.photos.push(url);
+      input.value = '';
+      renderPhotoGrid(p);
+      await persistProject(p);
+      renderProjectsTable();
+      showToast('Video added ✓');
+    });
+
+    /* ── Generic confirm dialog ── */
     const confirmOverlay = document.getElementById('confirmOverlay');
+    let pendingConfirm = null;
+    function askConfirm(title, msg, onOk) {
+      document.getElementById('confirmTitle').textContent = title;
+      document.getElementById('confirmMsg').textContent = msg;
+      pendingConfirm = onOk;
+      confirmOverlay.classList.add('show');
+    }
+    document.getElementById('confirmCancel').addEventListener('click', () => { confirmOverlay.classList.remove('show'); pendingConfirm = null; });
+    document.getElementById('confirmOk').addEventListener('click', async () => {
+      const cb = pendingConfirm;
+      pendingConfirm = null;
+      confirmOverlay.classList.remove('show');
+      if (cb) await cb();
+    });
 
     function confirmDelete(id) {
       const p = PROJECTS.find(x => x.id === id);
       if (!p) return;
-      pendingDeleteId = id;
-      document.getElementById('confirmTitle').textContent = `Delete "${p.title}"?`;
-      document.getElementById('confirmMsg').textContent = `This will permanently remove this project and all ${p.photos.length} photos.`;
-      confirmOverlay.classList.add('show');
-    }
-    document.getElementById('confirmCancel').addEventListener('click', () => { confirmOverlay.classList.remove('show'); pendingDeleteId = null; });
-    document.getElementById('confirmOk').addEventListener('click', () => {
-      if (pendingDeleteId) {
-        PROJECTS = PROJECTS.filter(p => p.id !== pendingDeleteId);
-        renderProjectsTable();
+      askConfirm(`Delete "${p.title}"?`, `This will permanently remove this project and all ${p.photos.length} items.`, async () => {
+        await apiSend('projects.php?id=' + encodeURIComponent(id), 'DELETE', {});
+        await reloadAll();
         showToast('Project deleted');
-        confirmOverlay.classList.remove('show');
-        pendingDeleteId = null;
-      }
+      });
+    }
+
+    /* ── Bookings / Subscribers: edit + delete ── */
+    const EDIT_CONFIG = {
+      booking: { endpoint: 'bookings.php', title: 'Edit Booking', list: () => BOOKINGS, fields: [
+        { key: 'name', label: 'Name' },
+        { key: 'email', label: 'Email', type: 'email' },
+        { key: 'phone', label: 'Phone' },
+        { key: 'event_type', label: 'Industry' },
+        { key: 'location', label: 'Location' },
+        { key: 'status', label: 'Status', type: 'select', options: ['New', 'In Review', 'Confirmed'] },
+        { key: 'notes', label: 'Notes', type: 'textarea' },
+      ] },
+      subscriber: { endpoint: 'subscribers.php', title: 'Edit Subscriber', list: () => SUBSCRIBERS, fields: [
+        { key: 'name', label: 'Name' },
+        { key: 'email', label: 'Email', type: 'email' },
+        { key: 'source', label: 'Source' },
+      ] },
+    };
+    const editOverlay = document.getElementById('editOverlay');
+    let editState = null;
+    const esc = s => String(s == null ? '' : s).replace(/"/g, '&quot;');
+
+    function openEditModal(type, id) {
+      const cfg = EDIT_CONFIG[type];
+      const item = cfg.list().find(x => String(x.id) === String(id));
+      if (!item) return;
+      editState = { type, id };
+      document.getElementById('editTitle').textContent = cfg.title;
+      document.getElementById('editFields').innerHTML = cfg.fields.map(f => {
+        const v = item[f.key] ?? '';
+        if (f.type === 'select')
+          return `<div class="form-group"><label class="form-label">${f.label}</label><select class="form-input" data-key="${f.key}">${f.options.map(o => `<option ${o === v ? 'selected' : ''}>${o}</option>`).join('')}</select></div>`;
+        if (f.type === 'textarea')
+          return `<div class="form-group"><label class="form-label">${f.label}</label><textarea class="form-input" data-key="${f.key}" rows="3">${esc(v)}</textarea></div>`;
+        return `<div class="form-group"><label class="form-label">${f.label}</label><input class="form-input" data-key="${f.key}" type="${f.type || 'text'}" value="${esc(v)}"></div>`;
+      }).join('');
+      editOverlay.classList.add('show');
+    }
+    function closeEditModal() { editOverlay.classList.remove('show'); editState = null; }
+    document.getElementById('editCancel').addEventListener('click', closeEditModal);
+    editOverlay.addEventListener('click', e => { if (e.target === editOverlay) closeEditModal(); });
+    document.getElementById('editSave').addEventListener('click', async () => {
+      if (!editState) return;
+      const payload = { id: editState.id };
+      document.querySelectorAll('#editFields [data-key]').forEach(el => payload[el.dataset.key] = el.value);
+      const res = await apiSend(EDIT_CONFIG[editState.type].endpoint, 'PUT', payload);
+      if (!res || !res.ok) { showToast((res && res.error) || 'Save failed'); return; }
+      closeEditModal();
+      await reloadAll();
+      showToast('Saved ✓');
     });
+
+    function editBooking(id) { openEditModal('booking', id); }
+    function editSubscriber(id) { openEditModal('subscriber', id); }
+    function deleteBooking(id) {
+      askConfirm('Delete this booking?', 'This permanently removes the inquiry.', async () => {
+        await apiSend('bookings.php?id=' + id, 'DELETE', {});
+        await reloadAll();
+        showToast('Booking deleted');
+      });
+    }
+    function deleteSubscriber(id) {
+      askConfirm('Remove this subscriber?', 'This permanently removes them from the list.', async () => {
+        await apiSend('subscribers.php?id=' + id, 'DELETE', {});
+        await reloadAll();
+        showToast('Subscriber removed');
+      });
+    }
+
+    /* ── Batch select + delete (bookings / subscribers) ── */
+    const BATCH = {
+      projects:    { rowClass: 'row-check-projects',    checkAll: 'checkAllProjects',    btn: 'btnDeleteProjects',    tbody: 'projectsTableBody',    endpoint: 'projects.php',    label: 'project' },
+      bookings:    { rowClass: 'row-check-bookings',    checkAll: 'checkAllBookings',    btn: 'btnDeleteBookings',    tbody: 'bookingsTableBody',    endpoint: 'bookings.php',    label: 'booking' },
+      subscribers: { rowClass: 'row-check-subscribers', checkAll: 'checkAllSubscribers', btn: 'btnDeleteSubscribers', tbody: 'subscribersTableBody', endpoint: 'subscribers.php', label: 'subscriber' },
+    };
+    function selectedIds(key) {
+      return [...document.querySelectorAll('.' + BATCH[key].rowClass + ':checked')].map(c => c.value);
+    }
+    function updateBatchUI(key) {
+      const ids = selectedIds(key);
+      const btn = document.getElementById(BATCH[key].btn);
+      btn.disabled = ids.length === 0;
+      btn.textContent = ids.length ? `Delete Selected (${ids.length})` : 'Delete Selected';
+    }
+    function resetBatch(key) {
+      const all = document.getElementById(BATCH[key].checkAll);
+      if (all) all.checked = false;
+      updateBatchUI(key);
+    }
+    function setupBatch(key) {
+      const cfg = BATCH[key];
+      document.getElementById(cfg.tbody).addEventListener('change', e => {
+        if (e.target.classList.contains(cfg.rowClass)) updateBatchUI(key);
+      });
+      document.getElementById(cfg.checkAll).addEventListener('change', e => {
+        document.querySelectorAll('.' + cfg.rowClass).forEach(c => c.checked = e.target.checked);
+        updateBatchUI(key);
+      });
+      document.getElementById(cfg.btn).addEventListener('click', () => {
+        const ids = selectedIds(key);
+        if (!ids.length) return;
+        askConfirm(`Delete ${ids.length} ${cfg.label}${ids.length > 1 ? 's' : ''}?`, 'This permanently removes the selected items.', async () => {
+          await apiSend(cfg.endpoint, 'DELETE', { ids });
+          await reloadAll();
+          showToast(`${ids.length} deleted`);
+        });
+      });
+    }
+    setupBatch('projects');
+    setupBatch('bookings');
+    setupBatch('subscribers');
 
     /* ── Toast ── */
     function showToast(msg) {
@@ -855,9 +1111,14 @@
       setTimeout(() => t.classList.remove('show'), 2800);
     }
 
-    /* ── Init on load ── */
-    renderProjectsTable();
-    initDashboard();
+    /* ── Init on load: skip login if a session already exists ── */
+    (async function () {
+      const me = await apiGet('auth.php?action=me').catch(() => ({ loggedIn: false }));
+      if (me && me.loggedIn) {
+        document.getElementById('loginScreen').classList.add('hidden');
+        reloadAll();
+      }
+    })();
   </script>
 </body>
 </html>
