@@ -1,6 +1,4 @@
-/* =====================
-   Variables
-   ===================== */
+/* Variables */
 :root {
   --bg:      #080808;
   --bg-2:    #111111;
@@ -20,9 +18,7 @@
   --ease:    0.3s ease;
 }
 
-/* =====================
-   Reset
-   ===================== */
+/* Reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
 body {
@@ -40,15 +36,11 @@ button { cursor: pointer; font-family: var(--sans); border: none; background: no
 input, textarea { font-family: var(--sans); }
 em { font-style: italic; color: var(--accent); }
 
-/* =====================
-   Layout
-   ===================== */
+/* Layout */
 .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
 .section { padding: 100px 0; }
 
-/* =====================
-   Buttons
-   ===================== */
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -67,9 +59,7 @@ em { font-style: italic; color: var(--accent); }
 .btn-ghost { border: 1px solid var(--border-2); color: var(--text-2); }
 .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-/* =====================
-   Navigation
-   ===================== */
+/* Navigation */
 .nav {
   position: fixed; top: 0; left: 0; right: 0;
   z-index: 1000; height: var(--nav-h);
@@ -109,9 +99,7 @@ em { font-style: italic; color: var(--accent); }
 .nav-toggle.open span:nth-child(2) { opacity: 0; }
 .nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
-/* =====================
-   Mobile Menu
-   ===================== */
+/* Mobile Menu */
 .mobile-menu {
   position: fixed; inset: 0; background: var(--bg);
   z-index: 999;
@@ -131,9 +119,7 @@ em { font-style: italic; color: var(--accent); }
 .mobile-link { font-family: var(--serif); font-size: 40px; font-weight: 300; color: var(--text-2); transition: color var(--ease); }
 .mobile-link:hover, .mobile-link.highlight { color: var(--accent); }
 
-/* =====================
-   Hero
-   ===================== */
+/* Hero */
 .hero {
   position: relative; height: 100vh; min-height: 600px;
   display: flex; align-items: center; overflow: hidden;
@@ -162,17 +148,13 @@ em { font-style: italic; color: var(--accent); }
 .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--accent), transparent); animation: pulse 2s ease-in-out infinite; }
 @keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-/* =====================
-   Section Headers
-   ===================== */
+/* Section Headers */
 .section-header { max-width: 600px; margin-bottom: 60px; }
 .section-eyebrow { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
 .section-title { font-family: var(--serif); font-size: clamp(32px, 4vw, 56px); font-weight: 300; line-height: 1.15; margin-bottom: 18px; }
 .section-desc { color: var(--text-2); font-size: 15px; line-height: 1.75; }
 
-/* =====================
-   Events
-   ===================== */
+/* Events */
 .events-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -203,9 +185,7 @@ em { font-style: italic; color: var(--accent); }
 .event-card h3 { font-family: var(--serif); font-size: 22px; font-weight: 400; margin-bottom: 10px; }
 .event-card p { color: var(--text-2); font-size: 13px; line-height: 1.75; }
 
-/* =====================
-   Portfolio
-   ===================== */
+/* Portfolio */
 .portfolio { background: var(--bg-2); }
 .portfolio-filters { display: flex; gap: 6px; margin-bottom: 36px; flex-wrap: wrap; }
 .filter-btn {
@@ -215,7 +195,7 @@ em { font-style: italic; color: var(--accent); }
 }
 .filter-btn.active, .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-/* ── Carousel ── */
+/* Carousel */
 .projects-grid { position: relative; }
 .carousel-empty { color: var(--text-2); text-align: center; padding: 60px 0; font-size: 15px; }
 
@@ -383,9 +363,7 @@ em { font-style: italic; color: var(--accent); }
 }
 .project-photo-item:hover .photo-hover { opacity: 1; }
 
-/* =====================
-   Booking
-   ===================== */
+/* Booking */
 .booking-wrap { max-width: 700px; margin: 0 auto; }
 .booking-steps { display: flex; align-items: center; margin-bottom: 48px; }
 .step { display: flex; align-items: center; gap: 10px; opacity: 0.35; transition: opacity var(--ease); }
@@ -448,9 +426,7 @@ em { font-style: italic; color: var(--accent); }
 .success-msg h3 { font-family: var(--serif); font-size: 36px; font-weight: 300; margin-bottom: 14px; }
 .success-msg p { color: var(--text-2); margin-bottom: 32px; }
 
-/* =====================
-   About
-   ===================== */
+/* About */
 .about { background: var(--bg-2); }
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
 .about-img-wrap { position: relative; }
@@ -469,9 +445,7 @@ em { font-style: italic; color: var(--accent); }
 .stat-plus { font-family: var(--serif); font-size: 28px; color: var(--accent); }
 .stat-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-2); }
 
-/* =====================
-   Contact
-   ===================== */
+/* Contact */
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
 .contact-details { margin-top: 36px; display: flex; flex-direction: column; gap: 24px; }
 .contact-item { display: flex; gap: 16px; align-items: flex-start; }
@@ -507,9 +481,7 @@ em { font-style: italic; color: var(--accent); }
 .signup-success { display: none; color: var(--accent); font-size: 14px; padding: 16px 0; }
 .check-icon { font-size: 18px; }
 
-/* =====================
-   Footer
-   ===================== */
+/* Footer */
 .footer { background: var(--bg-2); border-top: 1px solid var(--border); padding: 56px 0 28px; }
 .footer-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; margin-bottom: 44px; flex-wrap: wrap; }
 .footer-brand { display: flex; flex-direction: column; gap: 10px; }
@@ -526,11 +498,8 @@ em { font-style: italic; color: var(--accent); }
   padding-top: 20px; border-top: 1px solid var(--border);
   font-size: 11px; color: var(--text-3); flex-wrap: wrap; gap: 8px;
 }
-.demo-badge { color: var(--accent); opacity: 0.5; letter-spacing: 0.08em; }
 
-/* =====================
-   Lightbox
-   ===================== */
+/* Lightbox */
 .lightbox {
   position: fixed; inset: 0; background: rgba(0,0,0,0.96);
   z-index: 2000; display: flex; align-items: center; justify-content: center;
@@ -551,9 +520,7 @@ em { font-style: italic; color: var(--accent); }
 .lightbox-nav.prev { left: 8px; }
 .lightbox-nav.next { right: 8px; }
 
-/* =====================
-   Video media (lightbox + grid)
-   ===================== */
+/* Video media (lightbox + grid) */
 .lightbox-video { position: relative; width: min(92vw, 1100px); aspect-ratio: 16 / 9; }
 .lightbox-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; border-radius: 2px; }
 
@@ -568,9 +535,7 @@ em { font-style: italic; color: var(--accent); }
 /* "▶" prefix on the carousel type pill when the project has video */
 .carousel-type-pill.has-video::before { content: '▶ '; color: var(--accent); }
 
-/* =====================
-   Scroll Reveal
-   ===================== */
+/* Scroll Reveal */
 .reveal {
   opacity: 0;
   transform: translateY(28px);
@@ -581,9 +546,7 @@ em { font-style: italic; color: var(--accent); }
 .reveal[data-delay="200"] { transition-delay: 0.2s; }
 .reveal[data-delay="300"] { transition-delay: 0.3s; }
 
-/* =====================
-   Responsive
-   ===================== */
+/* Responsive */
 @media (max-width: 1024px) {
   .carousel-card { grid-template-columns: 50% 50%; }
   .carousel-info-side { padding: 36px 28px; }

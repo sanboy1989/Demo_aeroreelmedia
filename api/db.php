@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/config.php';
 
-/* ── PDO connection (with retry while MySQL boots) + schema bootstrap ── */
+/* PDO connection (with retry while MySQL boots) + schema bootstrap */
 function db() {
   static $pdo = null;
   if ($pdo !== null) return $pdo;
@@ -57,6 +57,22 @@ function init_db($pdo) {
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   ) CHARACTER SET utf8mb4");
 
+  // Overrides for the fixed front-end images (hero, service cards, logo, our story).
+  // Empty table = the page keeps the defaults hard-coded in index.html.
+  $pdo->exec("CREATE TABLE IF NOT EXISTS site_images (
+    img_key VARCHAR(64) PRIMARY KEY,
+    url TEXT,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  ) CHARACTER SET utf8mb4");
+
+  // Overrides for the fixed front-end copy (headings, service cards, about, contact…).
+  // Empty table = the page keeps the defaults hard-coded in index.html.
+  $pdo->exec("CREATE TABLE IF NOT EXISTS site_text (
+    text_key VARCHAR(64) PRIMARY KEY,
+    content TEXT,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  ) CHARACTER SET utf8mb4");
+
   seed($pdo);
 }
 
@@ -76,7 +92,7 @@ function seed($pdo) {
   }
 }
 
-/* ── Seed data (mirrors the public site) ── */
+/* Seed data (mirrors the public site) */
 function pics($seed, $n) {
   $a = [];
   for ($i = 0; $i < $n; $i++) $a[] = "https://picsum.photos/seed/{$seed}{$i}/1200/800";
@@ -99,7 +115,7 @@ function seed_projects() {
   ];
 }
 
-/* ── Shared helpers ── */
+/* Shared helpers */
 function json_out($data, $code = 200) {
   http_response_code($code);
   header('Content-Type: application/json');

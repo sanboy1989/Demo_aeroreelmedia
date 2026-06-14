@@ -32,7 +32,7 @@
     button { cursor: pointer; font-family: var(--sans); border: none; background: none; color: inherit; }
     input, textarea, select { font-family: var(--sans); }
 
-    /* ── Login ── */
+    /* Login */
     .login-screen {
       position: fixed; inset: 0; background: var(--bg);
       display: flex; align-items: center; justify-content: center; z-index: 999;
@@ -49,12 +49,11 @@
     .login-box input::placeholder { color: var(--text-3); }
     .btn-login { width: 100%; padding: 13px; background: var(--accent); color: #000; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; border-radius: var(--r); transition: background var(--ease); margin-top: 4px; }
     .btn-login:hover { background: #dbb85c; }
-    .login-hint { font-size: 11px; color: var(--text-3); margin-top: 16px; }
 
-    /* ── Layout ── */
+    /* Layout */
     .admin-layout { display: flex; min-height: 100vh; }
 
-    /* ── Sidebar ── */
+    /* Sidebar */
     .sidebar { width: 220px; flex-shrink: 0; background: var(--bg-2); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; }
     .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid var(--border); }
     .sidebar-logo .logo-text { font-family: var(--serif); font-size: 17px; letter-spacing: 0.18em; }
@@ -68,14 +67,14 @@
     .logout-btn { display: flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: 0.08em; color: var(--text-3); transition: color var(--ease); width: 100%; text-align: left; padding: 8px 0; }
     .logout-btn:hover { color: var(--red); }
 
-    /* ── Main ── */
+    /* Main */
     .main-content { flex: 1; margin-left: 220px; padding: 32px; min-height: 100vh; }
     .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 12px; }
     .page-title { font-family: var(--serif); font-size: 28px; font-weight: 300; }
     .page-subtitle { font-size: 12px; color: var(--text-2); margin-top: 2px; }
     .topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
-    /* ── Buttons ── */
+    /* Buttons */
     .btn-sm { padding: 9px 18px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; border-radius: var(--r); transition: all var(--ease); font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
     .btn-accent { background: var(--accent); color: #000; }
     .btn-accent:hover { background: #dbb85c; }
@@ -86,7 +85,7 @@
     .btn-ghost { color: var(--text-2); padding: 9px 12px; }
     .btn-ghost:hover { color: var(--accent); }
 
-    /* ── Stat Cards ── */
+    /* Stat Cards */
     .stat-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 32px; }
     .stat-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; }
     .stat-card-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-2); margin-bottom: 12px; }
@@ -97,21 +96,47 @@
     .dot-accent { background: var(--accent); }
     .dot-blue { background: var(--blue); }
 
-    /* ── Tab Content ── */
+    /* Tab Content */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* ── Panel views (sub-views within a tab) ── */
+    /* Site Images */
+    .img-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+    .img-slot { background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; }
+    .img-slot-preview { aspect-ratio: 16/10; background: #000 center/cover no-repeat; border-bottom: 1px solid var(--border); }
+    video.img-slot-preview { width: 100%; height: auto; object-fit: cover; display: block; }
+    .img-slot.is-contain .img-slot-preview { background-size: contain; background-color: #111; }
+    .img-slot-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+    .img-slot-name { font-size: 13px; color: var(--text); font-weight: 500; }
+    .img-slot-hint { font-size: 11px; color: var(--text-3); }
+    .img-slot-status { font-size: 11px; margin-top: 2px; }
+    .img-slot-status.custom { color: var(--accent); }
+    .img-slot-status.default { color: var(--text-3); }
+    .img-slot-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .img-slot input[type=file] { display: none; }
+
+    /* Site Text */
+    .text-group { margin-bottom: 32px; }
+    .text-group-title { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .text-field { margin-bottom: 18px; }
+    .text-field-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 12px; }
+    .text-field-label { font-size: 12px; color: var(--text-2); }
+    .text-field-label .custom-dot { color: var(--accent); margin-left: 6px; font-size: 10px; }
+    .text-field-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .text-field textarea { width: 100%; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); color: var(--text); font-size: 13px; padding: 10px 12px; resize: vertical; line-height: 1.5; font-family: var(--sans); }
+    .text-field textarea:focus { outline: none; border-color: var(--accent); }
+
+    /* Panel views (sub-views within a tab) */
     .panel-view { display: none; }
     .panel-view.active { display: block; }
 
-    /* ── Cards ── */
+    /* Cards */
     .card { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 20px; }
     .card-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
     .card-title { font-size: 13px; font-weight: 500; letter-spacing: 0.04em; }
     .card-body { padding: 24px; }
 
-    /* ── Table ── */
+    /* Table */
     .data-table { width: 100%; border-collapse: collapse; }
     .data-table th { text-align: left; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-3); font-weight: 500; padding: 12px 16px; border-bottom: 1px solid var(--border); }
     .data-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); vertical-align: middle; }
@@ -135,10 +160,10 @@
     .action-btn:hover { color: var(--accent); background: rgba(201,168,76,0.08); }
     .action-btn.danger:hover { color: var(--red); background: rgba(224,96,96,0.08); }
 
-    /* ── Projects List view ── */
+    /* Projects List view */
     .projects-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
 
-    /* ── New / Edit Project Form ── */
+    /* New / Edit Project Form */
     .panel-back { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: 0.08em; color: var(--text-2); margin-bottom: 28px; transition: color var(--ease); }
     .panel-back:hover { color: var(--accent); }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -155,17 +180,17 @@
     .check-label input { width: 14px; height: 14px; accent-color: var(--accent); }
     .form-footer { margin-top: 24px; display: flex; gap: 10px; }
 
-    /* ── Cover upload in form ── */
+    /* Cover upload in form */
     .cover-upload-zone { border: 2px dashed var(--border2); border-radius: var(--r); padding: 32px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; transition: all var(--ease); background: var(--bg-3); text-align: center; }
     .cover-upload-zone:hover { border-color: var(--accent); background: rgba(201,168,76,0.04); }
     .cover-preview { width: 100%; max-width: 200px; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--r); display: none; }
 
-    /* ── Project Photos management view ── */
+    /* Project Photos management view */
     .project-photos-header { margin-bottom: 24px; }
     .project-photos-title { font-family: var(--serif); font-size: 26px; font-weight: 300; }
     .project-photos-meta { font-size: 12px; color: var(--text-2); margin-top: 4px; }
 
-    /* ── Upload zone ── */
+    /* Upload zone */
     .upload-zone { border: 2px dashed var(--border2); border-radius: var(--r); padding: 48px 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; transition: all var(--ease); background: var(--bg-3); text-align: center; }
     .upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(201,168,76,0.04); }
     .upload-icon { font-size: 32px; color: var(--text-3); }
@@ -184,23 +209,23 @@
     .video-add-row { display: flex; gap: 8px; margin-bottom: 16px; }
     .video-add-row .form-input { flex: 1; }
 
-    /* ── Search ── */
+    /* Search */
     .search-wrap { position: relative; }
     .search-wrap input { padding: 9px 14px 9px 34px; background: var(--bg-3); border: 1px solid var(--border); border-radius: var(--r); color: var(--text); font-size: 12px; outline: none; width: 220px; transition: border-color var(--ease); }
     .search-wrap input:focus { border-color: var(--accent); }
     .search-wrap input::placeholder { color: var(--text-3); }
     .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-3); font-size: 13px; pointer-events: none; }
 
-    /* ── Settings ── */
+    /* Settings */
     .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .settings-grid .form-group { margin-bottom: 0; }
     .settings-footer { margin-top: 24px; display: flex; gap: 10px; }
 
-    /* ── Toast ── */
+    /* Toast */
     .toast { position: fixed; bottom: 32px; right: 32px; background: var(--bg-2); border: 1px solid var(--border); border-left: 3px solid var(--green); padding: 14px 20px; border-radius: var(--r); font-size: 13px; transform: translateY(10px); opacity: 0; transition: all 0.3s ease; pointer-events: none; z-index: 9999; }
     .toast.show { transform: translateY(0); opacity: 1; }
 
-    /* ── Confirm dialog ── */
+    /* Confirm dialog */
     .confirm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 8000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity var(--ease); }
     .confirm-overlay.show { opacity: 1; pointer-events: all; }
     .confirm-box { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); padding: 32px; max-width: 360px; width: 90%; }
@@ -226,10 +251,9 @@
         <div class="logo-sub">MEDIA</div>
       </div>
       <p class="login-badge">Admin Portal</p>
-      <input type="email" id="loginEmail" placeholder="Email address" value="Hallo@aeroreelmedia.com">
-      <input type="password" id="loginPass" placeholder="Password">
+      <input type="email" id="loginEmail" placeholder="Email address" autocomplete="username">
+      <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password">
       <button class="btn-login" id="loginBtn">Sign In</button>
-      <p class="login-hint">UAT default password: admin123</p>
     </div>
   </div>
 
@@ -245,6 +269,8 @@
       <nav class="sidebar-nav">
         <div class="nav-item active" data-tab="dashboard"><span class="nav-icon">▦</span> Dashboard</div>
         <div class="nav-item" data-tab="projects"><span class="nav-icon">◧</span> Projects</div>
+        <div class="nav-item" data-tab="images"><span class="nav-icon">▢</span> Site Images</div>
+        <div class="nav-item" data-tab="text"><span class="nav-icon">¶</span> Site Text</div>
         <div class="nav-item" data-tab="bookings"><span class="nav-icon">◈</span> Bookings</div>
         <div class="nav-item" data-tab="emails"><span class="nav-icon">✉</span> Email List</div>
         <div class="nav-item" data-tab="settings"><span class="nav-icon">◎</span> Settings</div>
@@ -257,7 +283,7 @@
     <!-- Main Content -->
     <main class="main-content">
 
-      <!-- ═══ DASHBOARD ═══ -->
+      <!-- DASHBOARD -->
       <div class="tab-content active" id="tab-dashboard">
         <div class="topbar">
           <div>
@@ -314,7 +340,7 @@
         </div>
       </div>
 
-      <!-- ═══ PROJECTS ═══ -->
+      <!-- PROJECTS -->
       <div class="tab-content" id="tab-projects">
 
         <!-- View 1: Projects List -->
@@ -463,7 +489,35 @@
 
       </div>
 
-      <!-- ═══ BOOKINGS ═══ -->
+      <!-- SITE IMAGES -->
+      <div class="tab-content" id="tab-images">
+        <div class="topbar">
+          <div>
+            <h1 class="page-title">Site Images</h1>
+            <p class="page-subtitle">Swap the fixed front-end images. Layout &amp; text stay the same — only the picture changes.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="img-slots" id="siteImagesGrid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SITE TEXT -->
+      <div class="tab-content" id="tab-text">
+        <div class="topbar">
+          <div>
+            <h1 class="page-title">Site Text</h1>
+            <p class="page-subtitle">Edit the wording on the public site. Layout stays the same — only the text changes. Leave a field empty &amp; Reset to restore the original.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body" id="siteTextGroups"></div>
+        </div>
+      </div>
+
+      <!-- BOOKINGS -->
       <div class="tab-content" id="tab-bookings">
         <div class="topbar">
           <div>
@@ -488,7 +542,7 @@
         </div>
       </div>
 
-      <!-- ═══ EMAIL LIST ═══ -->
+      <!-- EMAIL LIST -->
       <div class="tab-content" id="tab-emails">
         <div class="topbar">
           <div>
@@ -515,7 +569,7 @@
         </div>
       </div>
 
-      <!-- ═══ SETTINGS ═══ -->
+      <!-- SETTINGS -->
       <div class="tab-content" id="tab-settings">
         <div class="topbar">
           <div><h1 class="page-title">Settings</h1><p class="page-subtitle">Site configuration</p></div>
@@ -581,7 +635,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    /* ── Live data from the PHP/MySQL API ── */
+    /* Data loading */
     let PROJECTS = [];      // each project's `media` array is mapped to `photos` for this UI
     let BOOKINGS = [];
     let SUBSCRIBERS = [];
@@ -616,7 +670,7 @@
       initDashboard();
     }
 
-    /* ── Media helper: detect YouTube/Vimeo links (same logic as the public site) ── */
+    /* Detect YouTube/Vimeo links */
     function resolveMedia(url) {
       let m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/);
       if (m) return { type:'video', poster:`https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` };
@@ -625,7 +679,7 @@
       return { type:'image', src:url };
     }
 
-    /* ── Login / Logout (real session auth) ── */
+    /* Login / Logout */
     document.getElementById('loginBtn').addEventListener('click', async () => {
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPass').value;
@@ -643,25 +697,27 @@
       document.getElementById('loginScreen').classList.remove('hidden');
     });
 
-    /* ── Tab switching ── */
+    /* Tab switching */
     function switchTab(name) {
       document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       document.querySelector(`[data-tab="${name}"]`).classList.add('active');
       document.getElementById(`tab-${name}`).classList.add('active');
       if (name === 'projects') showView('list');
+      if (name === 'images') loadSiteImages();
+      if (name === 'text') loadSiteText();
     }
     document.querySelectorAll('.nav-item').forEach(item => {
       item.addEventListener('click', () => switchTab(item.dataset.tab));
     });
 
-    /* ── Panel view switching (within Projects tab) ── */
+    /* Panel view switching (within Projects tab) */
     function showView(name) {
       document.querySelectorAll('#tab-projects .panel-view').forEach(v => v.classList.remove('active'));
       document.getElementById(`view-${name}`).classList.add('active');
     }
 
-    /* ── Date formatting ── */
+    /* Date formatting */
     function fmtDate(s) {
       if (!s) return '';
       const d = new Date(s);
@@ -669,7 +725,7 @@
     }
     const badgeFor = status => status === 'Confirmed' ? 'badge-done' : status === 'In Review' ? 'badge-review' : 'badge-new';
 
-    /* ── Init dashboard ── */
+    /* Init dashboard */
     function initDashboard() {
       const totalPhotos = PROJECTS.reduce((sum, p) => sum + p.photos.length, 0);
       document.getElementById('dashPhotoCount').textContent = totalPhotos;
@@ -698,7 +754,7 @@
       </tbody></table>`;
     }
 
-    /* ── Bookings + Subscribers tables (from DB) ── */
+    /* Bookings + Subscribers tables (from DB) */
     function renderBookings() {
       const tbody = document.getElementById('bookingsTableBody');
       if (!tbody) return;
@@ -738,7 +794,7 @@
       resetBatch('subscribers');
     }
 
-    /* ── Render projects table ── */
+    /* Render projects table */
     function renderProjectsTable(filter) {
       const list = filter ? PROJECTS.filter(p => p.title.toLowerCase().includes(filter.toLowerCase()) || p.category.toLowerCase().includes(filter.toLowerCase())) : PROJECTS;
       document.getElementById('projectCountLabel').textContent = `${list.length} project${list.length !== 1 ? 's' : ''}`;
@@ -764,7 +820,7 @@
 
     document.getElementById('projectSearch').addEventListener('input', e => renderProjectsTable(e.target.value));
 
-    /* ── New project ── */
+    /* New project */
     document.getElementById('btnNewProject').addEventListener('click', () => {
       document.getElementById('editingProjectId').value = '';
       document.getElementById('projectForm').reset();
@@ -778,7 +834,7 @@
     document.getElementById('formBack').addEventListener('click', () => showView('list'));
     document.getElementById('formCancelBtn').addEventListener('click', () => showView('list'));
 
-    /* ── Edit project ── */
+    /* Edit project */
     function openEditForm(id) {
       const p = PROJECTS.find(x => x.id === id);
       if (!p) return;
@@ -804,7 +860,7 @@
       showView('form');
     }
 
-    /* ── Cover photo upload in form ── */
+    /* Cover photo upload in form */
     let pendingCoverFile = null;  // uploaded to the server when the form is saved
     const coverZone = document.getElementById('coverUploadZone');
     const coverInput = document.getElementById('coverFileInput');
@@ -833,7 +889,237 @@
       return res.url;
     }
 
-    /* ── Save project form (persists to MySQL via the API) ── */
+    /* Site Images */
+    const SITE_IMAGE_SLOTS = [
+      { key:'logo',      name:'Logo',                                  hint:'Top-left + footer. Use a transparent PNG.', def:'/images/logo.png', contain:true },
+      { key:'hero',      name:'Hero Background',                        hint:'Full-screen image or a video (WebM recommended, MP4 also works) — plays muted & loops.',    def:'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=1920&q=80', accept:'image/*,video/webm,video/mp4,video/ogg' },
+      { key:'service-1', name:'Service 1 — Cinematic Video Production', hint:'Service card image.', def:'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=70' },
+      { key:'service-2', name:'Service 2 — Commercial Photography',     hint:'Service card image.', def:'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&q=70' },
+      { key:'service-3', name:'Service 3 — Short-Form Video Marketing', hint:'Service card image.', def:'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=600&q=70' },
+      { key:'service-4', name:'Service 4 — Drone Media & Site Tracking',hint:'Service card image.', def:'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=70' },
+      { key:'service-5', name:'Service 5 — Social Media Management',    hint:'Service card image.', def:'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=600&q=70' },
+      { key:'service-6', name:'Service 6 — Web Design & Digital Growth',hint:'Service card image.', def:'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=70' },
+      { key:'our-story', name:'Our Story',                             hint:'Photo in the About / Our Story section.',   def:'/images/our_story.jpeg' },
+    ];
+    let SITE_IMAGES = {};
+
+    async function loadSiteImages() {
+      const data = await apiGet('site_images.php').catch(() => ({}));
+      SITE_IMAGES = (data && !Array.isArray(data)) ? data : {};
+      renderSiteImages();
+    }
+
+    function isVideoUrl(u) {
+      return /\.(mp4|webm|ogg|ogv|m4v|mov)(\?|#|$)/i.test(u || '');
+    }
+
+    function renderSiteImages() {
+      const grid = document.getElementById('siteImagesGrid');
+      if (!grid) return;
+      grid.innerHTML = SITE_IMAGE_SLOTS.map(s => {
+        const override = SITE_IMAGES[s.key];
+        const raw = override || s.def;
+        const url = raw.replace(/'/g, "\\'");
+        const isCustom = !!override;
+        const isVid = isVideoUrl(raw);
+        const accept = s.accept || 'image/*';
+        const preview = isVid
+          ? `<video class="img-slot-preview" src="${url}" muted loop autoplay playsinline></video>`
+          : `<div class="img-slot-preview" style="background-image:url('${url}')"></div>`;
+        const status = isCustom ? (isVid ? '● Custom video' : '● Custom image') : '○ Using default';
+        return `
+          <div class="img-slot${s.contain ? ' is-contain' : ''}">
+            ${preview}
+            <div class="img-slot-body">
+              <span class="img-slot-name">${s.name}</span>
+              <span class="img-slot-hint">${s.hint}</span>
+              <span class="img-slot-status ${isCustom ? 'custom' : 'default'}">${status}</span>
+              <div class="img-slot-actions">
+                <label class="btn-sm btn-accent">Upload<input type="file" accept="${accept}" data-slot="${s.key}"></label>
+                <button class="btn-sm btn-outline" data-slot-url="${s.key}">Use URL</button>
+                <button class="btn-sm btn-danger" data-slot-reset="${s.key}"${isCustom ? '' : ' disabled'}>Reset</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function saveSiteImage(key, url) {
+      const res = await apiSend('site_images.php', 'POST', { key, url });
+      if (!res || !res.ok) { showToast((res && res.error) || 'Save failed'); return; }
+      await loadSiteImages();
+      showToast(url ? 'Image updated' : 'Reset to default');
+    }
+
+    document.getElementById('siteImagesGrid').addEventListener('change', async e => {
+      const input = e.target.closest('input[type=file][data-slot]');
+      if (!input || !input.files[0]) return;
+      try {
+        showToast('Uploading…');
+        const url = await uploadFile(input.files[0]);
+        await saveSiteImage(input.dataset.slot, url);
+      } catch (err) { showToast(err.message || 'Upload failed'); }
+      input.value = '';
+    });
+
+    document.getElementById('siteImagesGrid').addEventListener('click', e => {
+      const urlBtn = e.target.closest('[data-slot-url]');
+      if (urlBtn) {
+        const key = urlBtn.dataset.slotUrl;
+        const isHero = key === 'hero';
+        const url = prompt(isHero
+          ? 'Paste a direct image or video URL (WebM or MP4) for the hero background:'
+          : 'Paste a direct image URL for this slot:', SITE_IMAGES[key] || '');
+        if (url && url.trim()) saveSiteImage(key, url.trim());
+        return;
+      }
+      const resetBtn = e.target.closest('[data-slot-reset]');
+      if (resetBtn && !resetBtn.disabled) {
+        askConfirm('Reset to default?', 'This puts the original image back on the live site.', () => saveSiteImage(resetBtn.dataset.slotReset, ''));
+      }
+    });
+
+    /* Site Text */
+    const TEXT_GROUPS = [
+      { title: 'Hero (top of page)', fields: [
+        { key:'hero-eyebrow',  label:'Eyebrow line', def:`A Full-Service Media Marketing Agency for Construction, Hospitality & Commercial Brands` },
+        { key:'hero-title-1',  label:'Headline — line 1', def:`Drive Growth and Authority` },
+        { key:'hero-title-2',  label:'Headline — line 2 (accent)', def:`Through Cinematic Marketing` },
+        { key:'hero-desc',     label:'Sub-text', big:true, def:`Cinematic media production, short-form video, and digital strategy — all under one roof, built to grow your brand.` },
+      ]},
+      { title: 'Services — section header', fields: [
+        { key:'services-eyebrow', label:'Eyebrow', def:`What We Do` },
+        { key:'services-title',   label:'Title', def:`Our Services` },
+        { key:'services-desc',    label:'Description', big:true, def:`From high-impact cinematic production to data-driven digital growth, we deliver full-service marketing strategies that drive real business results.` },
+      ]},
+      { title: 'Service Card 1', fields: [
+        { key:'service-1-tag',   label:'Tag', def:`Video` },
+        { key:'service-1-title', label:'Title', def:`Cinematic Video Production` },
+        { key:'service-1-desc',  label:'Body', big:true, def:`Elevate your brand prestige with cinematic style video content. We combine high-end ground cinematography with storytelling to produce commercial advertisements, corporate anthems, and hospitality promotional films that captivate audiences and inspire action.` },
+      ]},
+      { title: 'Service Card 2', fields: [
+        { key:'service-2-tag',   label:'Tag', def:`Photography` },
+        { key:'service-2-title', label:'Title', def:`Commercial Photography` },
+        { key:'service-2-desc',  label:'Body', big:true, def:`Replace generic stock photos with premium, custom visual assets. We deliver elite, editorial-grade imagery tailored for marketing campaigns, corporate portfolios, and digital growth.` },
+      ]},
+      { title: 'Service Card 3', fields: [
+        { key:'service-3-tag',   label:'Tag', def:`Social` },
+        { key:'service-3-title', label:'Title', def:`Short-Form Video Marketing` },
+        { key:'service-3-desc',  label:'Body', big:true, def:`Dominate social feeds where your customers hang out. We fully manage the scripting, shooting, and editing of high-impact Instagram Reels, TikToks, and YouTube Shorts designed to trigger platform algorithms, maximize viral engagement, and flood your business with new leads.` },
+      ]},
+      { title: 'Service Card 4', fields: [
+        { key:'service-4-tag',   label:'Tag', def:`Drone` },
+        { key:'service-4-title', label:'Title', def:`Drone Media & Site Tracking` },
+        { key:'service-4-desc',  label:'Body', big:true, def:`Leverage high-precision aerial solutions backed by advanced RPAS-certified compliance. We specialize in regular construction site progress tracking, and high-impact tender videos.` },
+      ]},
+      { title: 'Service Card 5', fields: [
+        { key:'service-5-tag',   label:'Tag', def:`SMM` },
+        { key:'service-5-title', label:'Title', def:`Social Media Management` },
+        { key:'service-5-desc',  label:'Body', big:true, def:`Turn online attention into long-term customer loyalty. From continuous content calendar planning and strategic copywriting to visual curation, we manage your brand's everyday digital presence, whether it's building a vibrant aesthetic on Instagram or industry authority on LinkedIn.` },
+      ]},
+      { title: 'Service Card 6', fields: [
+        { key:'service-6-tag',   label:'Tag', def:`Web` },
+        { key:'service-6-title', label:'Title', def:`Web Design & Digital Growth` },
+        { key:'service-6-desc',  label:'Body', big:true, def:`Your website should be your highest-performing salesman. We design high-converting, premium digital experiences, seamlessly integrating advanced booking systems for hospitality and showcasing expansive B2B portfolios for construction, all optimized with Google SEO to capture active search traffic.` },
+      ]},
+      { title: 'Portfolio — section header', fields: [
+        { key:'portfolio-eyebrow', label:'Eyebrow', def:`Our Work` },
+        { key:'portfolio-title',   label:'Title', def:`Projects` },
+        { key:'portfolio-desc',    label:'Description', big:true, def:`Browse our work by industry type. Click any project to view the full gallery.` },
+      ]},
+      { title: 'Booking — section header', fields: [
+        { key:'booking-eyebrow', label:'Eyebrow', def:`Get Started` },
+        { key:'booking-title',   label:'Title', def:`Request a Marketing Proposal` },
+        { key:'booking-desc',    label:'Description', big:true, def:`Tell us about your business goals and we'll design a tailored media marketing strategy for you within 24 hours.` },
+      ]},
+      { title: 'Our Story (About)', fields: [
+        { key:'about-eyebrow',  label:'Eyebrow', def:`Our Story` },
+        { key:'about-title-1',  label:'Title — line 1', def:`Born From Passion.` },
+        { key:'about-title-2',  label:'Title — line 2 (accent)', def:`Driven by Perspective.` },
+        { key:'about-p1',       label:'Paragraph 1', big:true, def:`Founded in Hong Kong in 2017, Aeroreel Media began with a simple belief: every story deserves to be told from the perfect angle. What started as our founder Andy’s dream, armed with just a single drone, has since evolved into a full-service visual storytelling studio.` },
+        { key:'about-p2',       label:'Paragraph 2', big:true, def:`We seamlessly blend cinematic video production with data-driven marketing strategies, helping construction, hospitality, and commercial brands cut through the noise and stand out in today's crowded digital landscape.` },
+        { key:'stat-1-label',   label:'Stat 1 label', def:`Years Experience` },
+        { key:'stat-2-label',   label:'Stat 2 label', def:`Projects Completed` },
+        { key:'stat-3-label',   label:'Stat 3 label', def:`Happy Client` },
+      ]},
+      { title: 'Contact & Newsletter', fields: [
+        { key:'contact-eyebrow', label:'Eyebrow', def:`Get In Touch` },
+        { key:'contact-title-1', label:'Title — line 1', def:`Let's Create` },
+        { key:'contact-title-2', label:'Title — line 2 (accent)', def:`Something Beautiful` },
+        { key:'contact-email',   label:'Email shown', def:`Hallo@aeroreelmedia.com` },
+        { key:'contact-phone',   label:'Phone shown', def:`825-288-2184` },
+        { key:'contact-base',    label:'Base / location', def:`Calgary / Hong Kong` },
+        { key:'signup-title',    label:'Newsletter heading', def:`Get Our Agency Capabilities Brochure` },
+        { key:'signup-desc',     label:'Newsletter description', big:true, def:`Enter your email to download our full service portfolio, project case studies, and standard retainer pricing.` },
+      ]},
+      { title: 'Footer', fields: [
+        { key:'footer-tagline', label:'Tagline', def:`Your Story, Our Lens.` },
+      ]},
+    ];
+    const TEXT_DEFAULTS = {};
+    TEXT_GROUPS.forEach(g => g.fields.forEach(f => { TEXT_DEFAULTS[f.key] = f.def; }));
+    let SITE_TEXT = {};
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    async function loadSiteText() {
+      const data = await apiGet('site_text.php').catch(() => ({}));
+      SITE_TEXT = (data && !Array.isArray(data)) ? data : {};
+      renderSiteText();
+    }
+
+    function renderSiteText() {
+      const box = document.getElementById('siteTextGroups');
+      if (!box) return;
+      box.innerHTML = TEXT_GROUPS.map(g => `
+        <div class="text-group">
+          <div class="text-group-title">${g.title}</div>
+          ${g.fields.map(f => {
+            const override = SITE_TEXT[f.key];
+            const isCustom = override != null && override !== '';
+            const val = isCustom ? override : f.def;
+            return `
+              <div class="text-field">
+                <div class="text-field-head">
+                  <span class="text-field-label">${f.label}${isCustom ? '<span class="custom-dot">● edited</span>' : ''}</span>
+                  <span class="text-field-actions">
+                    <button class="btn-sm btn-accent" data-text-save="${f.key}">Save</button>
+                    <button class="btn-sm btn-danger" data-text-reset="${f.key}"${isCustom ? '' : ' disabled'}>Reset</button>
+                  </span>
+                </div>
+                <textarea data-text-input="${f.key}" rows="${f.big ? 4 : 2}">${escapeHtml(val)}</textarea>
+              </div>`;
+          }).join('')}
+        </div>`).join('');
+    }
+
+    async function saveSiteText(key, content) {
+      const res = await apiSend('site_text.php', 'POST', { key, content });
+      if (!res || !res.ok) { showToast((res && res.error) || 'Save failed'); return; }
+      await loadSiteText();
+      showToast(content ? 'Text updated' : 'Reset to default');
+    }
+
+    document.getElementById('siteTextGroups').addEventListener('click', e => {
+      const saveBtn = e.target.closest('[data-text-save]');
+      if (saveBtn) {
+        const key = saveBtn.dataset.textSave;
+        const ta = document.querySelector(`[data-text-input="${key}"]`);
+        let val = ta.value.trim();
+        // Typing the original text back = no override needed.
+        if (val === (TEXT_DEFAULTS[key] || '').trim()) val = '';
+        saveSiteText(key, val);
+        return;
+      }
+      const resetBtn = e.target.closest('[data-text-reset]');
+      if (resetBtn && !resetBtn.disabled) {
+        askConfirm('Reset to default?', 'This puts the original wording back on the live site.', () => saveSiteText(resetBtn.dataset.textReset, ''));
+      }
+    });
+
+    /* Save project form */
     document.getElementById('projectForm').addEventListener('submit', async e => {
       e.preventDefault();
       const title = document.getElementById('fTitle').value.trim();
@@ -870,7 +1156,7 @@
       showView('list');
     });
 
-    /* ── Manage photos for a project ── */
+    /* Manage photos for a project */
     let currentPhotoProjectId = null;
 
     function openPhotosView(id) {
@@ -965,7 +1251,7 @@
       showToast('Video added ✓');
     });
 
-    /* ── Generic confirm dialog ── */
+    /* Generic confirm dialog */
     const confirmOverlay = document.getElementById('confirmOverlay');
     let pendingConfirm = null;
     function askConfirm(title, msg, onOk) {
@@ -992,7 +1278,7 @@
       });
     }
 
-    /* ── Bookings / Subscribers: edit + delete ── */
+    /* Bookings / Subscribers: edit + delete */
     const EDIT_CONFIG = {
       booking: { endpoint: 'bookings.php', title: 'Edit Booking', list: () => BOOKINGS, fields: [
         { key: 'name', label: 'Name' },
@@ -1060,7 +1346,7 @@
       });
     }
 
-    /* ── Batch select + delete (bookings / subscribers) ── */
+    /* Batch select + delete (bookings / subscribers) */
     const BATCH = {
       projects:    { rowClass: 'row-check-projects',    checkAll: 'checkAllProjects',    btn: 'btnDeleteProjects',    tbody: 'projectsTableBody',    endpoint: 'projects.php',    label: 'project' },
       bookings:    { rowClass: 'row-check-bookings',    checkAll: 'checkAllBookings',    btn: 'btnDeleteBookings',    tbody: 'bookingsTableBody',    endpoint: 'bookings.php',    label: 'booking' },
@@ -1103,7 +1389,7 @@
     setupBatch('bookings');
     setupBatch('subscribers');
 
-    /* ── Toast ── */
+    /* Toast */
     function showToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg;
@@ -1111,7 +1397,7 @@
       setTimeout(() => t.classList.remove('show'), 2800);
     }
 
-    /* ── Init on load: skip login if a session already exists ── */
+    /* Init on load: skip login if a session already exists */
     (async function () {
       const me = await apiGet('auth.php?action=me').catch(() => ({ loggedIn: false }));
       if (me && me.loggedIn) {
